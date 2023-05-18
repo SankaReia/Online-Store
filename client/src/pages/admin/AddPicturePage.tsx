@@ -3,27 +3,30 @@ import {
   Button,
   DialogTitle,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Paper,
   Select,
   SelectChangeEvent,
+  Snackbar,
   TextField,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import React, { FC, useState } from "react";
 import ImageChanger from "../../components/admin/ImageChanger";
-//   import { setAlert } from "../../store/slices/alertSlice";
-//   import Loader from "../../UI/Loader";
 import { categories } from "../../utils/categories";
 import { createPicture } from "../../http/pictureApi";
+//   import Loader from "../../UI/Loader";
 
 const AddPicturePage: FC = () => {
-  // const dispatch = useTypedDispatch();
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [imgFile, setImgFile] = useState<File>();
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const [isAdded, setIsAdded] = useState(false);
+  const [message, setMessage] = useState("");
 
   const ImageChooseHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -40,16 +43,34 @@ const AddPicturePage: FC = () => {
       formData.append("description", description);
       formData.append("category", category);
 
+      setMessage("Added successfully");
+      setIsAdded(true);
       return createPicture(formData);
     }
-    console.log("Введены не все данные");
-    // dispatch(
-    //   setAlert({
-    //     severity: "error",
-    //     message: "Введены не все данные",
-    //   })
-    // );
+    setMessage("Not all data is entered");
+    setIsAdded(true);
   };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setIsAdded(false);
+  };
+
+  const action = (
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={handleClose}
+    >
+      <CloseIcon fontSize="small" />
+    </IconButton>
+  );
 
   return (
     <Paper elevation={3} sx={{ p: "20px" }}>
@@ -141,20 +162,23 @@ const AddPicturePage: FC = () => {
               style={{ width: "100%" }}
               onClick={uploadHandler}
             >
-              Добавить
+              Add
             </Button>
           ) : (
             <Loader />
           )} */}
 
-        <Button
-          variant="contained"
-          style={{ width: "100%" }}
-          onClick={uploadHandler}
-        >
-          Добавить
+        <Button variant="contained" fullWidth onClick={uploadHandler}>
+          Add
         </Button>
       </div>
+      <Snackbar
+        open={isAdded}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={message}
+        action={action}
+      />
     </Paper>
   );
 };

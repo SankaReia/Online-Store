@@ -9,16 +9,10 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { PictureI } from "../store/slices/pictureSlice";
 
 interface PictureProp {
-  picture: {
-    id: number;
-    category: string;
-    description: string;
-    img: string;
-    price: string;
-    title: string;
-  };
+  picture: PictureI;
 }
 
 const PictureCard: FC<PictureProp> = ({ picture }) => {

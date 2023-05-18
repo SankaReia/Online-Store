@@ -2,7 +2,7 @@ import { $authHost, $host } from "./index";
 
 
 
-export const createPicture = async (picture: FormData) => {///////Поменять тип
+export const createPicture = async (picture: FormData) => {
     try {
         const {data} = await $authHost.post('api/picture', picture )
         return data
@@ -21,7 +21,7 @@ export const fetchPictures = async () => {
     }
 }
 
-export const fetchOnePicture = async (id: number) => {
+export const fetchOnePicture = async (id: string) => {
     try {
         const {data} = await $host.get('api/picture/' + id)
         return data

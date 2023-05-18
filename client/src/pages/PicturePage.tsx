@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAppSelector } from "../hooks/redux";
 import { PictureI } from "../store/slices/pictureSlice";
+import { fetchOnePicture } from "../http/pictureApi";
 
 const ModalPrice = {
   background: "black",
@@ -25,15 +25,13 @@ const ModalPrice = {
 const PicturePage: FC = () => {
   const { id } = useParams();
   const [counter, setCounter] = useState<number>(0);
-  const pictures = useAppSelector((state) => state.pictureReducer);
   const [picture, setPicture] = useState<PictureI>();
 
   useEffect(() => {
     if (id) {
-      const picture = pictures.find((el) => el.id === +id);
-      setPicture(picture);
+      fetchOnePicture(id).then(([picture]) => setPicture(picture));
     }
-  }, [id]);
+  }, []);
 
   if (!picture) {
     return <div>Loading</div>;
