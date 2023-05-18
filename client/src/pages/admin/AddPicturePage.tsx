@@ -12,20 +12,16 @@ import {
 } from "@mui/material";
 import React, { FC, useState } from "react";
 import ImageChanger from "../../components/admin/ImageChanger";
-import TextEditor from "../../components/admin/TextEditor";
-//   import useAdmin from "../../hooks/useAdmin";
-//   import { useTypedDispatch } from "../../store/hooks/useTypedDispatch";
 //   import { setAlert } from "../../store/slices/alertSlice";
 //   import Loader from "../../UI/Loader";
-//   import { technicsTypes } from "../../utils/technicsTypes";
 import { categories } from "../../utils/categories";
+import { createPicture } from "../../http/pictureApi";
 
 const AddPicturePage: FC = () => {
-  // const { addTechnic, isLoading } = useAdmin();
   // const dispatch = useTypedDispatch();
-  const [imgFile, setImgFile] = useState<File>();
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [imgFile, setImgFile] = useState<File>();
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
 
@@ -35,23 +31,18 @@ const AddPicturePage: FC = () => {
   };
 
   const uploadHandler = async () => {
-    // if (
-    //   imgFile &&
-    //   price.trim() &&
-    //   name.trim() &&
-    //   technicsTypes[+type]
-    // ) {
-    //   return addTechnic(
-    //     imgFile,
-    //     imgFileDescription,
-    //     name,
-    //     fullDescription,
-    //     shortDescription,
-    //     characteristic,
-    //     price,
-    //     technicsTypes[+type]
-    //   );
-    // }
+    if (imgFile && price.trim() && title.trim() && category) {
+      const formData = new FormData();
+
+      formData.append("title", title);
+      formData.append("price", price);
+      formData.append("img", imgFile);
+      formData.append("description", description);
+      formData.append("category", category);
+
+      return createPicture(formData);
+    }
+    console.log("Введены не все данные");
     // dispatch(
     //   setAlert({
     //     severity: "error",
@@ -131,7 +122,17 @@ const AddPicturePage: FC = () => {
         >
           Description
         </DialogTitle>
-        <TextEditor text={description} setText={setDescription} />
+
+        <TextField
+          id="outlined-multiline-flexible"
+          label="Multiline"
+          multiline
+          value={description}
+          fullWidth
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDescription(e.target.value)
+          }
+        />
       </div>
       <div style={{ marginTop: "10px" }}>
         {/* {!isLoading ? (
@@ -145,6 +146,14 @@ const AddPicturePage: FC = () => {
           ) : (
             <Loader />
           )} */}
+
+        <Button
+          variant="contained"
+          style={{ width: "100%" }}
+          onClick={uploadHandler}
+        >
+          Добавить
+        </Button>
       </div>
     </Paper>
   );

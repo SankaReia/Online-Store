@@ -17,13 +17,9 @@ import { useParams } from "react-router-dom";
 // import { useTypedSelector } from "../../store/hooks/useTypedSelector";
 // import { TechnicState } from "../../store/slices/technicSlice";
 // import Loader from "../../UI/Loader";
-// import TextEditor from "../../components/admin/TextEditor";
 // import { technicsTypes } from "../../utils/technicsTypes";
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
-
-import pictures from "../../pictures";
-import TextEditor from "../../components/admin/TextEditor";
 
 const EditPicturePage: React.FC = () => {
   const { id } = useParams();
@@ -170,7 +166,16 @@ const EditPicturePage: React.FC = () => {
             >
               Description
             </DialogTitle>
-            <TextEditor text={description} setText={setDescription} />
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Multiline"
+              multiline
+              value={description}
+              fullWidth
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setDescription(e.target.value)
+              }
+            />
           </div>
         </FormGroup>
         {/* <Box sx={{ display: "flex", justifyContent: "center" }}>

@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import pictureArr from "../pictures";
+import { useAppSelector } from "../hooks/redux";
+import { PictureI } from "../store/slices/pictureSlice";
 
 const ModalPrice = {
   background: "black",
@@ -24,11 +25,12 @@ const ModalPrice = {
 const PicturePage: FC = () => {
   const { id } = useParams();
   const [counter, setCounter] = useState<number>(0);
-  const [picture, setPicture] = useState<any>(null); /// Тип интерфейс picture
+  const pictures = useAppSelector((state) => state.pictureReducer);
+  const [picture, setPicture] = useState<PictureI>();
 
   useEffect(() => {
     if (id) {
-      const picture = pictureArr.find((el) => el.id === +id);
+      const picture = pictures.find((el) => el.id === +id);
       setPicture(picture);
     }
   }, [id]);
@@ -50,7 +52,7 @@ const PicturePage: FC = () => {
         <Grid item xs={6}>
           <ImageListItem>
             <img
-              src={picture.img}
+              src={process.env.REACT_APP_API_URL + picture.img}
               style={{ width: "500px", height: "360px" }}
               alt="product image"
             />

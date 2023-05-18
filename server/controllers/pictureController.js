@@ -6,7 +6,7 @@ const db = require("../db");
 class PictureController {
   async create(req, res, next) {
     try {
-      const { title, price, category_id, description } = req.body;
+      const { title, price, category, description } = req.body;
       const { img } = req.files;
       //Генерирует уникальный id файла:
       let fileName = uuid.v4() + ".jpg";
@@ -14,8 +14,8 @@ class PictureController {
       img.mv(path.resolve(__dirname, "..", "static", fileName));
 
       const picture = await db.query(
-        "INSERT INTO picture (title, price, img, description, category_id) values ($1, $2, $3, $4, $5) RETURNING *",
-        [title, price, fileName, description, category_id]
+        "INSERT INTO picture (title, price, img, description, category) values ($1, $2, $3, $4, $5) RETURNING *",
+        [title, price, fileName, description, category]
       );
 
       return res.json(picture.rows[0]);

@@ -1,13 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import PictureCard from "../components/PictureCard";
-import pictures from "../pictures"; //------------------------Массив картин
 import { useLocation } from "react-router-dom";
 import { categories } from "../utils/categories";
+import { PictureI } from "../store/slices/pictureSlice";
+import { useAppSelector } from "../hooks/redux";
 
 const Shop: FC = () => {
   const location = useLocation();
   const [title, setTitle] = useState<string>();
+  const pictures = useAppSelector((state) => state.pictureReducer);
 
   useEffect(() => {
     const cateogry = categories.find((el) => el.route === location.pathname);
@@ -25,8 +27,8 @@ const Shop: FC = () => {
       </Typography>
       <Grid container alignItems="flex-end">
         {pictures
-          .filter((el) => el.category === title)
-          .map((picture) => (
+          ?.filter((el: PictureI) => el.category === title)
+          .map((picture: PictureI) => (
             <PictureCard key={picture.id} picture={picture} />
           ))}
       </Grid>

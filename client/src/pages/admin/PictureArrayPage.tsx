@@ -19,10 +19,11 @@ import { useNavigate } from "react-router-dom";
 // import Loader from "../../UI/Loader";
 // import { adminConsts } from "../../utils/routsConsts";
 
-import pictures from "../../pictures";
 import { AdminConsts } from "../../utils/routsConsts";
+import { useAppSelector } from "../../hooks/redux";
 
 const PictureArrayPage: React.FC = () => {
+  const pictures = useAppSelector((state) => state.pictureReducer);
   // const selector = useTypedSelector((state) => state.technic);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState({ name: "", id: 0 });

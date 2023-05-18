@@ -13,10 +13,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 interface PictureProp {
   picture: {
     id: number;
-    title: string;
-    price: number;
-    img: string;
+    category: string;
     description: string;
+    img: string;
+    price: string;
+    title: string;
   };
 }
 
@@ -40,7 +41,7 @@ const PictureCard: FC<PictureProp> = ({ picture }) => {
         <CardContent sx={{ alignSelf: "center", cursor: "pointer" }}>
           <ImageListItem>
             <img
-              src={picture.img}
+              src={process.env.REACT_APP_API_URL + picture.img}
               alt="Product image"
               style={{ width: "280px", height: "300px" }}
             />

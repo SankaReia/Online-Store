@@ -1,9 +1,11 @@
 import {configureStore, combineReducers} from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice'
+import pictureReducer from './slices/pictureSlice'
 
 
 const rootReducer = combineReducers({
     userReducer,
+    pictureReducer,
 
 })
 

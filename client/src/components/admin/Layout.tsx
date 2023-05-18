@@ -4,7 +4,7 @@ import AdminNav from "./AdminNav";
 
 const Layout: React.FC = () => {
   return (
-    <div>
+    <div style={{ display: "flex", marginTop: "15px" }}>
       <AdminNav />
       <div style={{ height: "fit-content", width: "100%" }}>
         <Outlet />

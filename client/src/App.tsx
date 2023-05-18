@@ -10,6 +10,8 @@ import useAuth from "./hooks/useAuth";
 import { check } from "./http/userAPI";
 import { useAppDispatch } from "./hooks/redux";
 import { setUser } from "./store/slices/userSlice";
+import { fetchPictures } from "./http/pictureApi";
+import { setPicture } from "./store/slices/pictureSlice";
 
 declare module "@mui/material/styles" {
   interface Theme {
@@ -40,6 +42,8 @@ const App: FC = () => {
       check().then((data) =>
         dispatch(setUser({ id: data.id, email: data.email, role: data.role }))
       );
+
+      fetchPictures().then((pictures) => dispatch(setPicture(pictures)));
     } catch (error) {
       console.log(error);
     }
