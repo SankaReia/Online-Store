@@ -23,10 +23,12 @@ export const AdminRoutes: IRoute[] = [
     Component: PictureArrayPage,
   },
   {
-    path: AdminConsts.EDIT_PICTURE_ROUTE,
+    path: AdminConsts.EDIT_PICTURE_ROUTE + "/:id",
     Component: EditPicturePage,
   },
 ];
+
+//---------------------------------------------------------------------------
 
 export const publicRoutes: IRoute[] = [
   {
@@ -45,11 +47,9 @@ export const publicRoutes: IRoute[] = [
     path: PublicConsts.BASKET_ROUTE,
     Component: Basket,
   },
-  {
-    path: PublicConsts.BASKET_ROUTE,
-    Component: Basket,
-  },
 ];
+
+//---------------------------------------------------------------------------
 
 export const categoryRoutes: IRoute[] = [
   {

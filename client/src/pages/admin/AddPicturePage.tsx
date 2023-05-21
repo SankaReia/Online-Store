@@ -146,7 +146,7 @@ const AddPicturePage: FC = () => {
 
         <TextField
           id="outlined-multiline-flexible"
-          label="Multiline"
+          label="Description"
           multiline
           value={description}
           fullWidth
@@ -156,21 +156,13 @@ const AddPicturePage: FC = () => {
         />
       </div>
       <div style={{ marginTop: "10px" }}>
-        {/* {!isLoading ? (
-            <Button
-              variant="contained"
-              style={{ width: "100%" }}
-              onClick={uploadHandler}
-            >
-              Add
-            </Button>
-          ) : (
-            <Loader />
-          )} */}
-
+        {/* {!isLoading ? ( */}
         <Button variant="contained" fullWidth onClick={uploadHandler}>
           Add
         </Button>
+        {/* ) : (
+            <Loader />
+          )} */}
       </div>
       <Snackbar
         open={isAdded}

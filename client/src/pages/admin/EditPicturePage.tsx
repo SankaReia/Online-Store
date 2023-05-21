@@ -13,19 +13,18 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import useAdmin from "../../hooks/useAdmin";
-// import { useTypedSelector } from "../../store/hooks/useTypedSelector";
-// import { TechnicState } from "../../store/slices/technicSlice";
 // import Loader from "../../UI/Loader";
-// import { technicsTypes } from "../../utils/technicsTypes";
+
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
+import { fetchOnePicture } from "../../http/pictureApi";
+import { PictureI } from "../../store/slices/pictureSlice";
 
 const EditPicturePage: React.FC = () => {
   const { id } = useParams();
   // const { technicList, status } = useTypedSelector((state) => state.technic);
   // const { updateTechnic, updateImage, isLoading } = useAdmin();
-  // const [defaultValue, setDefaultValue] = useState<TechnicState>();
+  const [defaultValue, setDefaultValue] = useState<PictureI>();
 
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<string>("");
@@ -33,51 +32,37 @@ const EditPicturePage: React.FC = () => {
   const [category, setCategory] = useState<string>("");
   const [imgFile, setImgFile] = useState<File>();
 
-  // useEffect(() => {
-  //   const index = technicList.findIndex(
-  //     (el: TechnicState) => el.id.toString() === id
-  //   );
-  //   const technic = technicList[index];
-  //   setDefaultValue(technic);
-  //   setName(technic.name);
-  //   setPrice("" + technic.price);
-  //   setShortDescription(technic.shortDescription);
-  //   setFullDescription(technic.fullDescription);
-  //   setCharacteristic(technic.characteristic);
-  //   setType("" + technicsTypes.indexOf(technic.type));
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [status]);
+  useEffect(() => {
+    if (id) {
+      fetchOnePicture(id).then(([picture]) => setDefaultValue(picture));
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (defaultValue) {
+      setTitle(defaultValue.title);
+      setPrice(defaultValue.price);
+      setDescription(defaultValue.description);
+      setCategory(defaultValue.category);
+    }
+  }, [defaultValue]);
+
+  if (!defaultValue) {
+    return <div>Loading</div>;
+  }
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // if (!event.target.files) return;
-    // const name = event.target.name;
-    // switch (name) {
-    //   case "Изображение для карточки":
-    //     setImgFile(event.target.files[0]);
-    //     break;
-    //   case "Изображение для описания":
-    //     setImgFileDescription(event.target.files[0]);
-    //     break;
-    // }
+    if (!event.target.files) return;
+    setImgFile(event.target.files[0]);
   };
 
-  const imageSaveHandler = async (type: "imgname" | "imgFileDescription") => {
-    // if (!defaultValue) return;
-    // if (type === "imgname") {
-    //   if (!imgFile) return;
+  const imageSaveHandler = async () => {
+    if (!defaultValue) return;
+    if (!imgFile) return;
     //   await updateImage({
     //     technicId: defaultValue.id,
     //     type,
     //     imgFile: imgFile,
-    //   });
-    // }
-    // if (type === "imgFileDescription") {
-    //   if (!imgFileDescription) return;
-    //   await updateImage({
-    //     technicId: defaultValue.id,
-    //     type,
-    //     imgFile: imgFileDescription,
-    //   });
     // }
   };
 
@@ -94,13 +79,11 @@ const EditPicturePage: React.FC = () => {
   };
 
   const resetHandler = () => {
-    // if (!defaultValue) return;
-    // setName(defaultValue.name);
-    // setPrice("" + defaultValue.price);
-    // setShortDescription(defaultValue.shortDescription);
-    // setFullDescription(defaultValue.fullDescription);
-    // setCharacteristic(defaultValue.characteristic);
-    // setType("" + technicsTypes.indexOf(defaultValue.type));
+    if (!defaultValue) return;
+    setTitle(defaultValue.title);
+    setPrice(defaultValue.price);
+    setDescription(defaultValue.description);
+    setCategory(defaultValue.category);
   };
 
   // if (status === "pending") return <Loader />;
@@ -112,13 +95,11 @@ const EditPicturePage: React.FC = () => {
         <FormGroup>
           <TextField
             id="outlined-basic"
-            label="название"
+            label="Title"
             variant="outlined"
             type="text"
             size="small"
-            sx={{
-              w: "100%",
-            }}
+            fullWidth
             value={title}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setTitle(e.target.value)
@@ -126,11 +107,12 @@ const EditPicturePage: React.FC = () => {
           />
           <TextField
             id="price"
-            label="цена"
+            label="Price"
             variant="outlined"
             type="number"
             size="small"
             margin="normal"
+            fullWidth
             value={price}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setPrice(e.target.value)
@@ -138,19 +120,21 @@ const EditPicturePage: React.FC = () => {
           />
           <Box sx={{ mb: 3 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Тип</InputLabel>
+              <InputLabel id="demo-simple-select-label">Category</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
                 value={category}
-                label="Тип"
+                label="Category"
                 onChange={(event: SelectChangeEvent) =>
                   setCategory(event.target.value as string)
                 }
                 sx={{ mt: 1, height: "40px" }}
               >
-                {categories.map(({ title }, i) => (
-                  <MenuItem key={title} value={i}>
+                {categories.map(({ title }) => (
+                  <MenuItem
+                    key={title}
+                    value={title}
+                    sx={{ textTransform: "uppercase" }}
+                  >
                     {title}
                   </MenuItem>
                 ))}
@@ -168,7 +152,7 @@ const EditPicturePage: React.FC = () => {
             </DialogTitle>
             <TextField
               id="outlined-multiline-flexible"
-              label="Multiline"
+              label="Description"
               multiline
               value={description}
               fullWidth
@@ -178,75 +162,52 @@ const EditPicturePage: React.FC = () => {
             />
           </div>
         </FormGroup>
-        {/* <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {!isLoading ? (
-            <>
-              <Button variant="contained" onClick={clickHandler} size="large">
-                Сохранить
-              </Button>
-              <Button onClick={resetHandler}>Отменить</Button>
-            </>
-          ) : (
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {/* {!isLoading ? ( */}
+          <>
+            <Button variant="contained" onClick={clickHandler} size="large">
+              Save
+            </Button>
+            <Button onClick={resetHandler}>Cancel</Button>
+          </>
+          {/* ) : (
             <Loader />
-          )}
-        </Box> */}
+          )} */}
+        </Box>
       </Paper>
-      {/* {defaultValue && (
+      {defaultValue && (
         <Paper
           elevation={3}
           sx={{
             mt: 3,
             p: "15px",
             display: "flex",
-            justifyContent: "space-around",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
-          <div>
-            <ImageChanger
-              imgFile={imgFile}
-              changeHandler={changeHandler}
-              width={225}
-              height={120}
-              title={"Изображение для карточки"}
-              url={`${process.env.REACT_APP_SERVERURL}/${defaultValue.imgname}`}
-            />
-            {!isLoading ? (
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ mt: 2 }}
-                onClick={() => imageSaveHandler("imgname")}
-              >
-                Сохранить
-              </Button>
-            ) : (
+          <ImageChanger
+            imgFile={imgFile}
+            changeHandler={changeHandler}
+            width={225}
+            height={120}
+            title={"Choose Picture"}
+            url={process.env.REACT_APP_API_URL + defaultValue.img}
+          />
+          {/* {!isLoading ? ( */}
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ mt: 2 }}
+            onClick={imageSaveHandler}
+          >
+            Save
+          </Button>
+          {/* ) : (
               <Loader />
-            )}
-          </div>
-          <div>
-            <ImageChanger
-              imgFile={imgFileDescription}
-              changeHandler={changeHandler}
-              width={420}
-              height={420}
-              title={"Изображение для описания"}
-              url={`${process.env.REACT_APP_SERVERURL}/${defaultValue.imgFileDescription}`}
-            />
-            {!isLoading ? (
-              <Button
-                variant="contained"
-                size="small"
-                sx={{ mt: 2 }}
-                onClick={() => imageSaveHandler("imgFileDescription")}
-              >
-                Сохранить
-              </Button>
-            ) : (
-              <Loader />
-            )}
-          </div>
+            )} */}
         </Paper>
-      )} */}
+      )}
     </>
   );
 };

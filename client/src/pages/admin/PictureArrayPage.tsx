@@ -4,18 +4,18 @@ import {
   List,
   ListItem,
   IconButton,
-  Icon,
   ListItemAvatar,
   Avatar,
   ListItemText,
   Paper,
 } from "@mui/material";
+import { Edit, DeleteForever } from "@mui/icons-material/";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import useAdmin from "../../hooks/useAdmin";
 // import { useTypedSelector } from "../../store/hooks/useTypedSelector";
 // import { TechnicState } from "../../store/slices/technicSlice";
-// import DeleteModal from "../../UI/DeleteModal";
+import DeleteModal from "../../UI/DeleteModal";
 // import Loader from "../../UI/Loader";
 // import { adminConsts } from "../../utils/routsConsts";
 
@@ -24,10 +24,8 @@ import { useAppSelector } from "../../hooks/redux";
 
 const PictureArrayPage: React.FC = () => {
   const pictures = useAppSelector((state) => state.pictureReducer);
-  // const selector = useTypedSelector((state) => state.technic);
   const [isModal, setIsModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState({ name: "", id: 0 });
-  // const { deleteTechnic } = useAdmin();
   const navigate = useNavigate();
 
   const deleteHandler = (id: number) => {
@@ -58,7 +56,7 @@ const PictureArrayPage: React.FC = () => {
                           )
                         }
                       >
-                        <Icon>edit</Icon>
+                        <Edit />
                       </IconButton>
                       <IconButton
                         edge="end"
@@ -71,7 +69,7 @@ const PictureArrayPage: React.FC = () => {
                           setIsModal(true);
                         }}
                       >
-                        <Icon>delete</Icon>
+                        <DeleteForever />
                       </IconButton>
                     </div>
                   }
@@ -88,14 +86,13 @@ const PictureArrayPage: React.FC = () => {
           </List>
         </Paper>
       </Box>
-      {/* <DeleteModal
+      <DeleteModal
         isModal={isModal}
         setIsModal={setIsModal}
-        technicName={modalInfo.name}
-        id={modalInfo.id}
         onDelete={deleteHandler}
-        isOrder={false}
-      /> */}
+        title={modalInfo.name} ///////
+        id={modalInfo.id} //////////
+      />
     </>
   );
 };
