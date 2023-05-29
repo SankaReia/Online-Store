@@ -12,6 +12,7 @@ import { useAppDispatch } from "./hooks/redux";
 import { setUser } from "./store/slices/userSlice";
 import { fetchPictures } from "./http/pictureApi";
 import { setPicture } from "./store/slices/pictureSlice";
+import Loader from "./UI/Loader";
 
 declare module "@mui/material/styles" {
   interface Theme {
@@ -35,7 +36,7 @@ const theme: Theme = createTheme({
 
 const App: FC = () => {
   const dispatch = useAppDispatch();
-  const { isAdmin } = useAuth();
+  const { isAdmin, isAuth } = useAuth();
 
   useEffect(() => {
     try {
@@ -48,6 +49,10 @@ const App: FC = () => {
       console.log(error);
     }
   }, []);
+
+  // if (!isAuth) {
+  //   return <Loader />;
+  // }
 
   return (
     <ThemeProvider theme={theme}>

@@ -90,8 +90,8 @@ const PictureArrayPage: React.FC = () => {
         isModal={isModal}
         setIsModal={setIsModal}
         onDelete={deleteHandler}
-        title={modalInfo.name} ///////
-        id={modalInfo.id} //////////
+        title={modalInfo.name}
+        id={modalInfo.id}
       />
     </>
   );

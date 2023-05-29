@@ -6,7 +6,7 @@ export interface PictureI {
     category: string;
     description: string;
     img: string;
-    price: string;
+    price: number;
     title: string;
   }
 

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-// import Loader from "../../UI/Loader";
+import Loader from "../../UI/Loader";
 
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
@@ -22,33 +22,29 @@ import { PictureI } from "../../store/slices/pictureSlice";
 
 const EditPicturePage: React.FC = () => {
   const { id } = useParams();
-  // const { technicList, status } = useTypedSelector((state) => state.technic);
-  // const { updateTechnic, updateImage, isLoading } = useAdmin();
   const [defaultValue, setDefaultValue] = useState<PictureI>();
 
   const [title, setTitle] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [imgFile, setImgFile] = useState<File>();
 
   useEffect(() => {
     if (id) {
-      fetchOnePicture(id).then(([picture]) => setDefaultValue(picture));
+      fetchOnePicture(id).then(([picture]) => {
+        setDefaultValue(picture);
+
+        setTitle(picture.title);
+        setPrice(picture.price);
+        setDescription(picture.description);
+        setCategory(picture.category);
+      });
     }
   }, [id]);
 
-  useEffect(() => {
-    if (defaultValue) {
-      setTitle(defaultValue.title);
-      setPrice(defaultValue.price);
-      setDescription(defaultValue.description);
-      setCategory(defaultValue.category);
-    }
-  }, [defaultValue]);
-
   if (!defaultValue) {
-    return <div>Loading</div>;
+    return <Loader />;
   }
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +111,7 @@ const EditPicturePage: React.FC = () => {
             fullWidth
             value={price}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPrice(e.target.value)
+              setPrice(+e.target.value)
             }
           />
           <Box sx={{ mb: 3 }}>
