@@ -6,13 +6,16 @@ import {
   Grid,
   ImageListItem,
   Typography,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PictureI } from "../store/slices/pictureSlice";
 import { fetchOnePicture } from "../http/pictureApi";
+import useAuth from "../hooks/useAuth";
 
-const ModalPrice = {
+const priceStyle = {
   background: "black",
   borderRadius: "20px",
   fontSize: 24,
@@ -22,9 +25,23 @@ const ModalPrice = {
   mb: 2,
 };
 
+const counterStyle = {
+  width: "56px",
+  height: "56px",
+  lineHeight: "50px",
+  fontSize: "24px",
+  textAlign: "center",
+  border: "3px solid #000",
+  borderLeft: "none",
+  borderRight: "none",
+};
+
 const PicturePage: FC = () => {
   const { id } = useParams();
-  const [counter, setCounter] = useState<number>(0);
+  const { isAuth } = useAuth();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+
+  const [counter, setCounter] = useState<number>(1);
   const [picture, setPicture] = useState<PictureI>();
 
   useEffect(() => {
@@ -36,6 +53,16 @@ const PicturePage: FC = () => {
   if (!picture) {
     return <div>Loading</div>;
   }
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
 
   return (
     <Box>
@@ -58,7 +85,7 @@ const PicturePage: FC = () => {
         </Grid>
 
         <Grid item xs={6}>
-          <Typography sx={ModalPrice}>{picture.price} $</Typography>
+          <Typography sx={priceStyle}>{picture.price} $</Typography>
           <Typography sx={{ fontSize: 18, color: "gray" }}>
             {picture.description}
           </Typography>
@@ -76,31 +103,21 @@ const PicturePage: FC = () => {
                   border: "3px solid black",
                   borderRadius: "50% 0 0 50%",
                 }}
-                onClick={() => setCounter((prev) => prev - 1)}
+                onClick={() => setCounter((prev) => (prev > 1 ? prev - 1 : 1))}
               >
                 <Remove />
               </Fab>
 
-              <input
-                type="number"
-                readOnly
-                value={counter}
-                style={{
-                  border: "3px solid #000",
-                  borderLeft: "none",
-                  borderRight: "none",
-                  fontSize: "24px",
-                  width: "56px",
-                  textAlign: "center",
-                }}
-              />
+              <Box sx={counterStyle}>{counter}</Box>
               <Fab
                 sx={{
                   bgcolor: "white",
                   border: "3px solid black",
                   borderRadius: "0 50% 50% 0",
                 }}
-                onClick={() => setCounter((prev) => prev + 1)}
+                onClick={() =>
+                  setCounter((prev) => (prev < 10 ? prev + 1 : 10))
+                }
               >
                 <Add />
               </Fab>
@@ -112,6 +129,7 @@ const PicturePage: FC = () => {
                 padding: "15px 20px",
                 background: "black",
               }}
+              onClick={() => !isAuth && setOpenSnackbar(true)}
             >
               Add to cart
               <ArrowRightAlt />
@@ -119,6 +137,16 @@ const PicturePage: FC = () => {
           </div>
         </Grid>
       </Grid>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleClose}
+      >
+        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
+          You are not logged in!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

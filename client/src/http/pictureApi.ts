@@ -29,3 +29,15 @@ export const fetchOnePicture = async (id: string) => {
         console.log(e)
     }
 }
+
+
+
+export const deletePicture = async (id: number) => {
+    try {
+        const {data} = await $authHost.delete(`api/picture/delete/${id}`)
+        return data
+    } catch (e) {
+        console.log(e)
+    }
+
+}

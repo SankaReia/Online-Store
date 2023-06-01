@@ -12,15 +12,12 @@ import {
 import { Edit, DeleteForever } from "@mui/icons-material/";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import useAdmin from "../../hooks/useAdmin";
-// import { useTypedSelector } from "../../store/hooks/useTypedSelector";
-// import { TechnicState } from "../../store/slices/technicSlice";
 import DeleteModal from "../../UI/DeleteModal";
 // import Loader from "../../UI/Loader";
-// import { adminConsts } from "../../utils/routsConsts";
 
 import { AdminConsts } from "../../utils/routsConsts";
 import { useAppSelector } from "../../hooks/redux";
+import { deletePicture } from "../../http/pictureApi";
 
 const PictureArrayPage: React.FC = () => {
   const pictures = useAppSelector((state) => state.pictureReducer);
@@ -29,7 +26,11 @@ const PictureArrayPage: React.FC = () => {
   const navigate = useNavigate();
 
   const deleteHandler = (id: number) => {
-    // deleteTechnic(id);
+    try {
+      deletePicture(id);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

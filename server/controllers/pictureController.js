@@ -2,6 +2,7 @@ const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../error/apiError");
 const db = require("../db");
+const { unlink } = require("node:fs/promises");
 
 class PictureController {
   async create(req, res, next) {
@@ -47,6 +48,28 @@ class PictureController {
     const { id } = req.params;
     const picture = await db.query("SELECT * FROM picture WHERE id = $1", [id]);
     return res.json(picture.rows);
+  }
+
+  //-----------------------------------------------------------------------------------
+
+  async deleteOne(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      const picture = await db.query("SELECT * FROM picture WHERE id = $1", [
+        id,
+      ]);
+
+      await unlink(path.join(__dirname, "..", "static", picture.rows[0].img));
+
+      await db.query("DELETE FROM picture WHERE id = $1", [id]);
+
+      return res.json({
+        message: "deleted successfully",
+      });
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   }
 }
 

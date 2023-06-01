@@ -9,27 +9,27 @@ import poster from '../img/poster.webp'
 export const categories= [
     {
         title:"modular paintings",
-        route: CategoryConsts.MODULAR_ROUTE as string,
-        background: module as string
+        route: CategoryConsts.MODULAR_ROUTE ,
+        background: module
     },
     {
         title:"framed paintings",
-        route: CategoryConsts.FRAMED_ROUTE as string,
-        background: frame as string
+        route: CategoryConsts.FRAMED_ROUTE ,
+        background: frame 
     },
     {
         title: "posters",
-        route: CategoryConsts.POSTERS_ROUTE as string,
-        background: poster as string
+        route: CategoryConsts.POSTERS_ROUTE ,
+        background: poster 
     },
     {
         title: "clock paintings",
-        route: CategoryConsts.CLOCK_ROUTE as string,
-        background: clock as string
+        route: CategoryConsts.CLOCK_ROUTE,
+        background: clock
     },
     {
         title: "lightboxes",
-        route: CategoryConsts.LIGHTBOXES_ROUTE as string,
-        background: light as string
+        route: CategoryConsts.LIGHTBOXES_ROUTE,
+        background: light 
     }, 
 ]

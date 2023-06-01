@@ -1,9 +1,10 @@
 import {
+  Alert,
+  AlertColor,
   Box,
   Button,
   DialogTitle,
   FormControl,
-  IconButton,
   InputLabel,
   MenuItem,
   Paper,
@@ -12,7 +13,6 @@ import {
   Snackbar,
   TextField,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import React, { FC, useState } from "react";
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
@@ -25,8 +25,10 @@ const AddPicturePage: FC = () => {
   const [imgFile, setImgFile] = useState<File>();
   const [description, setDescription] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+
   const [isAdded, setIsAdded] = useState(false);
   const [message, setMessage] = useState("");
+  const [alertType, setAlertType] = useState<AlertColor>("success");
 
   const ImageChooseHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -43,11 +45,13 @@ const AddPicturePage: FC = () => {
       formData.append("description", description);
       formData.append("category", category);
 
-      setMessage("Added successfully");
+      setMessage("Added successfully!");
+      setAlertType("success");
       setIsAdded(true);
       return createPicture(formData);
     }
-    setMessage("Not all data is entered");
+    setMessage("Not all data is entered!");
+    setAlertType("warning");
     setIsAdded(true);
   };
 
@@ -60,17 +64,6 @@ const AddPicturePage: FC = () => {
     }
     setIsAdded(false);
   };
-
-  const action = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={handleClose}
-    >
-      <CloseIcon fontSize="small" />
-    </IconButton>
-  );
 
   return (
     <Paper elevation={3} sx={{ p: "20px" }}>
@@ -164,13 +157,15 @@ const AddPicturePage: FC = () => {
             <Loader />
           )} */}
       </div>
-      <Snackbar
-        open={isAdded}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message={message}
-        action={action}
-      />
+      <Snackbar open={isAdded} autoHideDuration={5000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={alertType}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 };
