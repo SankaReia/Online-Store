@@ -4,9 +4,12 @@ const db = require("../db");
 const jwt = require("jsonwebtoken");
 
 const generateJwt = (id, email, role) => {
-  return jwt.sign({ id, email, role }, process.env.SECRET_KEY, {
+  return jwt.sign(
+    { id, email, role },
+    process.env.SECRET_KEY /* {
     expiresIn: "24h",
-  });
+  } */
+  );
 };
 
 class UserController {

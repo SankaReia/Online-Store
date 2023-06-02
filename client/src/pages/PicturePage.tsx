@@ -1,8 +1,7 @@
-import { Add, ArrowRightAlt, Remove } from "@mui/icons-material";
+import { ArrowRightAlt } from "@mui/icons-material";
 import {
   Button,
   Box,
-  Fab,
   Grid,
   ImageListItem,
   Typography,
@@ -14,6 +13,9 @@ import { useParams } from "react-router-dom";
 import { PictureI } from "../store/slices/pictureSlice";
 import { fetchOnePicture } from "../http/pictureApi";
 import useAuth from "../hooks/useAuth";
+import Counter from "../UI/Counter";
+import { useAppSelector } from "../hooks/redux";
+import { addToCart } from "../http/basketApi";
 
 const priceStyle = {
   background: "black",
@@ -25,18 +27,8 @@ const priceStyle = {
   mb: 2,
 };
 
-const counterStyle = {
-  width: "56px",
-  height: "56px",
-  lineHeight: "50px",
-  fontSize: "24px",
-  textAlign: "center",
-  border: "3px solid #000",
-  borderLeft: "none",
-  borderRight: "none",
-};
-
 const PicturePage: FC = () => {
+  const userID = useAppSelector((state) => state.userReducer.id);
   const { id } = useParams();
   const { isAuth } = useAuth();
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -48,7 +40,18 @@ const PicturePage: FC = () => {
     if (id) {
       fetchOnePicture(id).then(([picture]) => setPicture(picture));
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const addToCartHandler = () => {
+    if (!isAuth) return setOpenSnackbar(true);
+
+    try {
+      if (id) addToCart(userID, id, counter);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!picture) {
     return <div>Loading</div>;
@@ -66,14 +69,10 @@ const PicturePage: FC = () => {
 
   return (
     <Box>
-      <Typography
-        variant="h4"
-        component="h2"
-        sx={{ textAlign: "center", mt: 5, mb: 5 }}
-      >
+      <Typography variant="h4" component="h2" sx={{ textAlign: "center" }}>
         {picture.title}
       </Typography>
-      <Grid container>
+      <Grid container sx={{ mt: 5 }}>
         <Grid item xs={6}>
           <ImageListItem>
             <img
@@ -96,32 +95,7 @@ const PicturePage: FC = () => {
               marginTop: "30px",
             }}
           >
-            <div style={{ display: "flex" }}>
-              <Fab
-                sx={{
-                  bgcolor: "white",
-                  border: "3px solid black",
-                  borderRadius: "50% 0 0 50%",
-                }}
-                onClick={() => setCounter((prev) => (prev > 1 ? prev - 1 : 1))}
-              >
-                <Remove />
-              </Fab>
-
-              <Box sx={counterStyle}>{counter}</Box>
-              <Fab
-                sx={{
-                  bgcolor: "white",
-                  border: "3px solid black",
-                  borderRadius: "0 50% 50% 0",
-                }}
-                onClick={() =>
-                  setCounter((prev) => (prev < 10 ? prev + 1 : 10))
-                }
-              >
-                <Add />
-              </Fab>
-            </div>
+            <Counter counter={counter} setCounter={setCounter} />
             <Button
               variant="contained"
               sx={{
@@ -129,7 +103,7 @@ const PicturePage: FC = () => {
                 padding: "15px 20px",
                 background: "black",
               }}
-              onClick={() => !isAuth && setOpenSnackbar(true)}
+              onClick={addToCartHandler}
             >
               Add to cart
               <ArrowRightAlt />

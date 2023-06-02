@@ -10,7 +10,8 @@ create TABLE basket (
     person_id INTEGER,
     FOREIGN KEY (person_id) REFERENCES person (id),
     picture_id INTEGER,
-    FOREIGN KEY (picture_id) REFERENCES picture (id)
+    FOREIGN KEY (picture_id) REFERENCES picture (id),
+    quantity INTEGER
 ); 
 
 

@@ -40,7 +40,7 @@ const Carousel: FC<CarouselProp> = ({
     <Box
       sx={{
         position: "relative",
-        mt: "50px",
+        mb: 5,
       }}
     >
       <NavigateBefore sx={ArrowStyle} onClick={() => onPrevious()} />

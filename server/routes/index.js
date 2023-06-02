@@ -3,10 +3,10 @@ const router = new Router();
 
 const userRouter = require("./userRouter");
 const pictureRouter = require("./pictureRouter");
-const categoryRouter = require("./categoryRouter");
+const basketRouter = require("./basketRouter");
 
 router.use("/user", userRouter);
-router.use("/category", categoryRouter);
 router.use("/picture", pictureRouter);
+router.use("/basket", basketRouter);
 
 module.exports = router;

@@ -21,7 +21,7 @@ const Shop: FC = () => {
       <Typography
         variant="h5"
         component="h2"
-        sx={{ textAlign: "center", mt: 3, textTransform: "uppercase" }}
+        sx={{ textAlign: "center", textTransform: "uppercase" }}
       >
         {title}
       </Typography>

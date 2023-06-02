@@ -8,6 +8,7 @@ export interface PictureI {
     img: string;
     price: number;
     title: string;
+    quantity: number;
   }
 
 const initialState: PictureI[]  = []

@@ -27,7 +27,7 @@ const LayOut: FC = () => {
     >
       <NavBar />
 
-      <Container component="main">
+      <Container component="main" sx={{ mt: 5 }}>
         <Outlet />
       </Container>
 

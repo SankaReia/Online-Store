@@ -38,7 +38,6 @@ const Home: FC = () => {
 
       <Card
         sx={{
-          mt: "50px",
           p: 2,
           borderRadius: "15px",
           boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px",

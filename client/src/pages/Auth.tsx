@@ -49,10 +49,10 @@ const Auth: FC = () => {
   return (
     <Box
       sx={{
-        marginTop: 8,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        mt: 5,
       }}
     >
       <Avatar sx={{ m: 1, bgcolor: "#1A1C29" }}>

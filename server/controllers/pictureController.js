@@ -27,19 +27,15 @@ class PictureController {
 
   //-----------------------------------------------------------------------------------
 
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     //query - строка запроса
-    const { category_id } = req.query;
-    let pictures;
-    if (!category_id) {
-      pictures = await db.query("SELECT * FROM picture");
-    } else {
-      pictures = await db.query(
-        "SELECT * FROM picture WHERE category_id = $1",
-        [category_id]
-      );
+    try {
+      const pictures = await db.query("SELECT * FROM picture");
+
+      return res.json(pictures.rows);
+    } catch (error) {
+      next(ApiError.badRequest(error.message));
     }
-    return res.json(pictures.rows);
   }
 
   //-----------------------------------------------------------------------------------
