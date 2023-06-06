@@ -127,8 +127,8 @@ const Basket: FC = () => {
                 fontWeight: "600",
               }}
             >
-              <span>QTY: 6</span>
-              <span>400 $</span>
+              <span>QTY: 9</span>
+              <span>1175 $</span>
             </CardContent>
             <CardActions>
               <Button
