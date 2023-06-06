@@ -1,4 +1,5 @@
-#Online Store
+# Online Store
+## This is not a real art store written using React, TypeScript, Express.js, PostgreSql
 
 ![screen1](https://github.com/SankaReia/Online-Store/assets/111002770/73fe1772-c1f0-4d36-bd40-ff8d7d2fd74a)
 ![screen2](https://github.com/SankaReia/Online-Store/assets/111002770/ab75bbc2-8c60-4848-b1ee-80764847ad7b)
