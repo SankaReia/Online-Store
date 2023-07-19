@@ -1,17 +1,22 @@
-import {configureStore, combineReducers} from '@reduxjs/toolkit'
+import {configureStore, combineReducers, getDefaultMiddleware} from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice'
-import pictureReducer from './slices/pictureSlice'
+import basketReducer from './slices/basketSlice'
+import { pictureAPI } from '../services/PictureService'
+
 
 
 const rootReducer = combineReducers({
     userReducer,
-    pictureReducer,
+    basketReducer,
+    [pictureAPI.reducerPath]: pictureAPI.reducer
 
 })
 
 export const setupStore = () => {
     return configureStore({
-        reducer: rootReducer
+        reducer: rootReducer,
+        middleware: (getDefaultMiddleware) => 
+            getDefaultMiddleware().concat(pictureAPI.middleware)
     }) 
 }
 

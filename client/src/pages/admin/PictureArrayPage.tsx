@@ -18,9 +18,10 @@ import DeleteModal from "../../UI/DeleteModal";
 import { AdminConsts } from "../../utils/routsConsts";
 import { useAppSelector } from "../../hooks/redux";
 import { deletePicture } from "../../http/pictureApi";
+import { pictureAPI } from "../../services/PictureService";
 
 const PictureArrayPage: React.FC = () => {
-  const pictures = useAppSelector((state) => state.pictureReducer);
+  const { data } = pictureAPI.useFetchAllPicturesQuery("");
   const [isModal, setIsModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState({ name: "", id: 0 });
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ const PictureArrayPage: React.FC = () => {
           <List>
             {
               // pictures.status !== "pending" ? (
-              pictures.map((picture, i) => (
+              data?.map((picture, i) => (
                 <ListItem
                   key={picture.id}
                   secondaryAction={

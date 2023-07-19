@@ -10,12 +10,14 @@ import {
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { PictureI } from "../store/slices/pictureSlice";
+
 import { fetchOnePicture } from "../http/pictureApi";
 import useAuth from "../hooks/useAuth";
 import Counter from "../UI/Counter";
 import { useAppSelector } from "../hooks/redux";
 import { addToCart } from "../http/basketApi";
+import { PictureI } from "../utils/models";
+import { pictureAPI } from "../services/PictureService";
 
 const priceStyle = {
   background: "black",
@@ -32,9 +34,13 @@ const PicturePage: FC = () => {
   const { id } = useParams();
   const { isAuth } = useAuth();
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
   const [counter, setCounter] = useState<number>(1);
   const [picture, setPicture] = useState<PictureI>();
+
+  if (id) {
+    const { data } = pictureAPI.useFetchOnePictureQuery(id);
+    console.log(data);
+  }
 
   useEffect(() => {
     if (id) {
@@ -74,13 +80,11 @@ const PicturePage: FC = () => {
       </Typography>
       <Grid container sx={{ mt: 5 }}>
         <Grid item xs={6}>
-          <ImageListItem>
-            <img
-              src={process.env.REACT_APP_API_URL + picture.img}
-              style={{ width: "500px", height: "360px" }}
-              alt="product image"
-            />
-          </ImageListItem>
+          <img
+            src={process.env.REACT_APP_API_URL + picture.img}
+            style={{ maxWidth: "500px", maxHeight: "360px" }}
+            alt="product image"
+          />
         </Grid>
 
         <Grid item xs={6}>

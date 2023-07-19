@@ -12,14 +12,14 @@ export const createPicture = async (picture: FormData) => {
 
 }
 
-export const fetchPictures = async () => {
-    try {
-        const {data} = await $host.get('api/picture' )
-        return data
-    }catch (e){
-        console.log(e)
-    }
-}
+// export const fetchPictures = async () => {
+//     try {
+//         const {data} = await $host.get('api/picture' )
+//         return data
+//     }catch (e){
+//         console.log(e)
+//     }
+// }
 
 export const fetchOnePicture = async (id: string) => {
     try {

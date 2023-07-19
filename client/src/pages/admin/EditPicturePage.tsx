@@ -18,7 +18,7 @@ import Loader from "../../UI/Loader";
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
 import { fetchOnePicture } from "../../http/pictureApi";
-import { PictureI } from "../../store/slices/pictureSlice";
+import { PictureI } from "../../utils/models";
 
 const EditPicturePage: React.FC = () => {
   const { id } = useParams();

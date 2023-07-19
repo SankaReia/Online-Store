@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PictureI } from "../store/slices/pictureSlice";
+import { PictureI } from "../utils/models";
 
 interface PictureProp {
   picture: PictureI;
