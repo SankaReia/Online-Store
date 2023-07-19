@@ -15,9 +15,6 @@ export const pictureAPI = createApi({
         fetchOnePicture: build.query<PictureI, string>({
             query: (id: string)=>({
                 url: 'api/picture/' + id,
-                // params: {
-                //     id: id
-                // }
             })
         })
     })

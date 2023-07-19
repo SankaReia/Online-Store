@@ -10,7 +10,7 @@ import Loader from "../UI/Loader";
 const Shop: FC = () => {
   const location = useLocation();
   const [title, setTitle] = useState<string>();
-  const { data } = pictureAPI.useFetchAllPicturesQuery("");
+  const { data: pictures } = pictureAPI.useFetchAllPicturesQuery("");
 
   useEffect(() => {
     const cateogry = categories.find((el) => el.route === location.pathname);
@@ -19,7 +19,7 @@ const Shop: FC = () => {
 
   return (
     <>
-      {data ? (
+      {pictures ? (
         <Box>
           <Typography
             variant="h5"
@@ -29,7 +29,7 @@ const Shop: FC = () => {
             {title}
           </Typography>
           <Grid container alignItems="flex-end">
-            {data
+            {pictures
               ?.filter((el: PictureI) => el.category === title)
               .map((picture: PictureI) => (
                 <PictureCard key={picture.id} picture={picture} />

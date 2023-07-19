@@ -21,14 +21,14 @@ export const createPicture = async (picture: FormData) => {
 //     }
 // }
 
-export const fetchOnePicture = async (id: string) => {
-    try {
-        const {data} = await $host.get('api/picture/' + id)
-        return data
-    }catch (e){
-        console.log(e)
-    }
-}
+// export const fetchOnePicture = async (id: string) => {
+//     try {
+//         const {data} = await $host.get('api/picture/' + id)
+//         return data
+//     }catch (e){
+//         console.log(e)
+//     }
+// }
 
 
 

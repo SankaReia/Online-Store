@@ -1,23 +1,13 @@
 import { ArrowRightAlt } from "@mui/icons-material";
-import {
-  Button,
-  Box,
-  Grid,
-  ImageListItem,
-  Typography,
-  Snackbar,
-  Alert,
-} from "@mui/material";
+import { Button, Box, Grid, Typography, Snackbar, Alert } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import { fetchOnePicture } from "../http/pictureApi";
 import useAuth from "../hooks/useAuth";
 import Counter from "../UI/Counter";
 import { useAppSelector } from "../hooks/redux";
 import { addToCart } from "../http/basketApi";
-import { PictureI } from "../utils/models";
 import { pictureAPI } from "../services/PictureService";
+import Loader from "../UI/Loader";
 
 const priceStyle = {
   background: "black",
@@ -30,38 +20,21 @@ const priceStyle = {
 };
 
 const PicturePage: FC = () => {
-  const userID = useAppSelector((state) => state.userReducer.id);
   const { id } = useParams();
+  const { data: picture } = pictureAPI.useFetchOnePictureQuery(id as string);
+  const userID = useAppSelector((state) => state.userReducer.id);
   const { isAuth } = useAuth();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [counter, setCounter] = useState<number>(1);
-  const [picture, setPicture] = useState<PictureI>();
-
-  if (id) {
-    const { data } = pictureAPI.useFetchOnePictureQuery(id);
-    console.log(data);
-  }
-
-  useEffect(() => {
-    if (id) {
-      fetchOnePicture(id).then(([picture]) => setPicture(picture));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
 
   const addToCartHandler = () => {
     if (!isAuth) return setOpenSnackbar(true);
-
     try {
       if (id) addToCart(userID, id, counter);
     } catch (error) {
       console.log(error);
     }
   };
-
-  if (!picture) {
-    return <div>Loading</div>;
-  }
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
@@ -74,58 +47,68 @@ const PicturePage: FC = () => {
   };
 
   return (
-    <Box>
-      <Typography variant="h4" component="h2" sx={{ textAlign: "center" }}>
-        {picture.title}
-      </Typography>
-      <Grid container sx={{ mt: 5 }}>
-        <Grid item xs={6}>
-          <img
-            src={process.env.REACT_APP_API_URL + picture.img}
-            style={{ maxWidth: "500px", maxHeight: "360px" }}
-            alt="product image"
-          />
-        </Grid>
-
-        <Grid item xs={6}>
-          <Typography sx={priceStyle}>{picture.price} $</Typography>
-          <Typography sx={{ fontSize: 18, color: "gray" }}>
-            {picture.description}
+    <>
+      {picture ? (
+        <Box>
+          <Typography variant="h4" component="h2" sx={{ textAlign: "center" }}>
+            {picture.title}
           </Typography>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              marginTop: "30px",
-            }}
-          >
-            <Counter counter={counter} setCounter={setCounter} />
-            <Button
-              variant="contained"
-              sx={{
-                borderRadius: "30px",
-                padding: "15px 20px",
-                background: "black",
-              }}
-              onClick={addToCartHandler}
-            >
-              Add to cart
-              <ArrowRightAlt />
-            </Button>
-          </div>
-        </Grid>
-      </Grid>
+          <Grid container sx={{ mt: 5 }}>
+            <Grid item xs={6}>
+              <img
+                src={process.env.REACT_APP_API_URL + picture.img}
+                style={{ maxWidth: "500px", maxHeight: "360px" }}
+                alt="product image"
+              />
+            </Grid>
 
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={5000}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity="warning" sx={{ width: "100%" }}>
-          You are not logged in!
-        </Alert>
-      </Snackbar>
-    </Box>
+            <Grid item xs={6}>
+              <Typography sx={priceStyle}>{picture.price} $</Typography>
+              <Typography sx={{ fontSize: 18, color: "gray" }}>
+                {picture.description}
+              </Typography>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: "30px",
+                }}
+              >
+                <Counter counter={counter} setCounter={setCounter} />
+                <Button
+                  variant="contained"
+                  sx={{
+                    borderRadius: "30px",
+                    padding: "15px 20px",
+                    background: "black",
+                  }}
+                  onClick={addToCartHandler}
+                >
+                  Add to cart
+                  <ArrowRightAlt />
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={5000}
+            onClose={handleClose}
+          >
+            <Alert
+              onClose={handleClose}
+              severity="warning"
+              sx={{ width: "100%" }}
+            >
+              You are not logged in!
+            </Alert>
+          </Snackbar>
+        </Box>
+      ) : (
+        <Loader />
+      )}
+    </>
   );
 };
 

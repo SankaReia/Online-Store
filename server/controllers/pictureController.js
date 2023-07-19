@@ -43,7 +43,7 @@ class PictureController {
   async getOne(req, res) {
     const { id } = req.params;
     const picture = await db.query("SELECT * FROM picture WHERE id = $1", [id]);
-    return res.json(picture.rows);
+    return res.json(picture.rows[0]);
   }
 
   //-----------------------------------------------------------------------------------

@@ -14,16 +14,16 @@ import {
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../../UI/Loader";
-
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
-import { fetchOnePicture } from "../../http/pictureApi";
 import { PictureI } from "../../utils/models";
+import { pictureAPI } from "../../services/PictureService";
 
 const EditPicturePage: React.FC = () => {
   const { id } = useParams();
-  const [defaultValue, setDefaultValue] = useState<PictureI>();
+  const { data: picture } = pictureAPI.useFetchOnePictureQuery(id as string);
 
+  const [defaultValue, setDefaultValue] = useState<PictureI>();
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
@@ -31,21 +31,14 @@ const EditPicturePage: React.FC = () => {
   const [imgFile, setImgFile] = useState<File>();
 
   useEffect(() => {
-    if (id) {
-      fetchOnePicture(id).then(([picture]) => {
-        setDefaultValue(picture);
-
-        setTitle(picture.title);
-        setPrice(picture.price);
-        setDescription(picture.description);
-        setCategory(picture.category);
-      });
+    if (picture) {
+      setDefaultValue(picture);
+      setTitle(picture.title);
+      setPrice(picture.price);
+      setDescription(picture.description);
+      setCategory(picture.category);
     }
-  }, [id]);
-
-  if (!defaultValue) {
-    return <Loader />;
-  }
+  }, [picture]);
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -82,127 +75,133 @@ const EditPicturePage: React.FC = () => {
     setCategory(defaultValue.category);
   };
 
-  // if (status === "pending") return <Loader />;
-
   return (
     <>
-      <DialogTitle style={{ textAlign: "center" }}>{title}</DialogTitle>
-      <Paper elevation={3} sx={{ p: "15px" }}>
-        <FormGroup>
-          <TextField
-            id="outlined-basic"
-            label="Title"
-            variant="outlined"
-            type="text"
-            size="small"
-            fullWidth
-            value={title}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setTitle(e.target.value)
-            }
-          />
-          <TextField
-            id="price"
-            label="Price"
-            variant="outlined"
-            type="number"
-            size="small"
-            margin="normal"
-            fullWidth
-            value={price}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPrice(+e.target.value)
-            }
-          />
-          <Box sx={{ mb: 3 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Category</InputLabel>
-              <Select
-                value={category}
-                label="Category"
-                onChange={(event: SelectChangeEvent) =>
-                  setCategory(event.target.value as string)
+      {picture ? (
+        <>
+          <DialogTitle style={{ textAlign: "center" }}>{title}</DialogTitle>
+          <Paper elevation={3} sx={{ p: "15px" }}>
+            <FormGroup>
+              <TextField
+                id="outlined-basic"
+                label="Title"
+                variant="outlined"
+                type="text"
+                size="small"
+                fullWidth
+                value={title}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setTitle(e.target.value)
                 }
-                sx={{ mt: 1, height: "40px" }}
-              >
-                {categories.map(({ title }) => (
-                  <MenuItem
-                    key={title}
-                    value={title}
-                    sx={{ textTransform: "uppercase" }}
+              />
+              <TextField
+                id="price"
+                label="Price"
+                variant="outlined"
+                type="number"
+                size="small"
+                margin="normal"
+                fullWidth
+                value={price}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setPrice(+e.target.value)
+                }
+              />
+              <Box sx={{ mb: 3 }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Category
+                  </InputLabel>
+                  <Select
+                    value={category}
+                    label="Category"
+                    onChange={(event: SelectChangeEvent) =>
+                      setCategory(event.target.value as string)
+                    }
+                    sx={{ mt: 1, height: "40px" }}
                   >
-                    {title}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
-          <div style={{ marginTop: "20px", padding: "15px" }}>
-            <DialogTitle
-              style={{
-                textAlign: "center",
-                margin: "0 0 5px 0",
-              }}
-            >
-              Description
-            </DialogTitle>
-            <TextField
-              id="outlined-multiline-flexible"
-              label="Description"
-              multiline
-              value={description}
-              fullWidth
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setDescription(e.target.value)
-              }
-            />
-          </div>
-        </FormGroup>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {/* {!isLoading ? ( */}
-          <>
-            <Button variant="contained" onClick={clickHandler} size="large">
-              Save
-            </Button>
-            <Button onClick={resetHandler}>Cancel</Button>
-          </>
-          {/* ) : (
-            <Loader />
-          )} */}
-        </Box>
-      </Paper>
-      {defaultValue && (
-        <Paper
-          elevation={3}
-          sx={{
-            mt: 3,
-            p: "15px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <ImageChanger
-            imgFile={imgFile}
-            changeHandler={changeHandler}
-            width={225}
-            height={120}
-            title={"Choose Picture"}
-            url={process.env.REACT_APP_API_URL + defaultValue.img}
-          />
-          {/* {!isLoading ? ( */}
-          <Button
-            variant="contained"
-            size="small"
-            sx={{ mt: 2 }}
-            onClick={imageSaveHandler}
-          >
-            Save
-          </Button>
-          {/* ) : (
+                    {categories.map(({ title }) => (
+                      <MenuItem
+                        key={title}
+                        value={title}
+                        sx={{ textTransform: "uppercase" }}
+                      >
+                        {title}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <div style={{ marginTop: "20px", padding: "15px" }}>
+                <DialogTitle
+                  style={{
+                    textAlign: "center",
+                    margin: "0 0 5px 0",
+                  }}
+                >
+                  Description
+                </DialogTitle>
+                <TextField
+                  id="outlined-multiline-flexible"
+                  label="Description"
+                  multiline
+                  value={description}
+                  fullWidth
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setDescription(e.target.value)
+                  }
+                />
+              </div>
+            </FormGroup>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              {/* {!isLoading ? ( */}
+              <>
+                <Button variant="contained" onClick={clickHandler} size="large">
+                  Save
+                </Button>
+                <Button onClick={resetHandler}>Cancel</Button>
+              </>
+              {/* ) : (
               <Loader />
             )} */}
-        </Paper>
+            </Box>
+          </Paper>
+          {defaultValue && (
+            <Paper
+              elevation={3}
+              sx={{
+                mt: 3,
+                p: "15px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <ImageChanger
+                imgFile={imgFile}
+                changeHandler={changeHandler}
+                width={225}
+                height={120}
+                title={"Choose Picture"}
+                url={process.env.REACT_APP_API_URL + defaultValue.img}
+              />
+              {/* {!isLoading ? ( */}
+              <Button
+                variant="contained"
+                size="small"
+                sx={{ mt: 2 }}
+                onClick={imageSaveHandler}
+              >
+                Save
+              </Button>
+              {/* ) : (
+                <Loader />
+              )} */}
+            </Paper>
+          )}
+        </>
+      ) : (
+        <Loader />
       )}
     </>
   );
