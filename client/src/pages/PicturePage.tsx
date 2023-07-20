@@ -27,7 +27,7 @@ const PicturePage: FC = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [counter, setCounter] = useState<number>(1);
 
-  const addToCartHandler = () => {
+  const addToBasketHandler = () => {
     if (!isAuth) return setOpenSnackbar(true);
     try {
       if (id) addToCart(userID, id, counter);
@@ -82,7 +82,7 @@ const PicturePage: FC = () => {
                     padding: "15px 20px",
                     background: "black",
                   }}
-                  onClick={addToCartHandler}
+                  onClick={addToBasketHandler}
                 >
                   Add to cart
                   <ArrowRightAlt />

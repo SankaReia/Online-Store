@@ -27,6 +27,24 @@ class PictureController {
 
   //-----------------------------------------------------------------------------------
 
+  async update(req, res, next) {
+    try {
+      // const { id } = req.params;
+      const { title, price, category, description, id } = req.body;
+
+      const newPicture = await db.query(
+        "UPDATE picture SET title=$1, price=$2, description=$3, category=$4 WHERE id=$5 RETURNING *",
+        [title, price, description, category, id]
+      );
+
+      return res.json(newPicture.rows[0]);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+
+  //-----------------------------------------------------------------------------------
+
   async getAll(req, res, next) {
     //query - строка запроса
     try {

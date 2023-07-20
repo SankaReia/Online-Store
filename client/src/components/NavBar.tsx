@@ -69,7 +69,7 @@ const NavBar: FC = () => {
               <Tooltip title="admin" arrow>
                 <AdminPanelSettingsSharp
                   sx={{ mx: 0.5 }}
-                  onClick={() => navigate(AdminConsts.ADD_PICTURE_ROUTE)}
+                  onClick={() => navigate(AdminConsts.PICTURE_ARRAY_ROUTE)}
                 />
               </Tooltip>
             )}

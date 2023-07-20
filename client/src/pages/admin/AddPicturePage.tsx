@@ -16,10 +16,12 @@ import {
 import React, { FC, useState } from "react";
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
-import { createPicture } from "../../http/pictureApi";
+import { pictureAPI } from "../../services/PictureService";
 //   import Loader from "../../UI/Loader";
 
 const AddPicturePage: FC = () => {
+  const [createPicture, {}] = pictureAPI.useCreatePictureMutation();
+
   const [title, setTitle] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [imgFile, setImgFile] = useState<File>();
@@ -48,11 +50,14 @@ const AddPicturePage: FC = () => {
       setMessage("Added successfully!");
       setAlertType("success");
       setIsAdded(true);
-      return createPicture(formData);
+
+      await createPicture(formData);
+      // return await createPicture(formData);
+    } else {
+      setMessage("Not all data is entered!");
+      setAlertType("warning");
+      setIsAdded(true);
     }
-    setMessage("Not all data is entered!");
-    setAlertType("warning");
-    setIsAdded(true);
   };
 
   const handleClose = (

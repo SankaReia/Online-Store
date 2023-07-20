@@ -22,6 +22,7 @@ import { pictureAPI } from "../../services/PictureService";
 const EditPicturePage: React.FC = () => {
   const { id } = useParams();
   const { data: picture } = pictureAPI.useFetchOnePictureQuery(id as string);
+  const [updatePicture, {}] = pictureAPI.useUpdatePictureMutation();
 
   const [defaultValue, setDefaultValue] = useState<PictureI>();
   const [title, setTitle] = useState<string>("");
@@ -48,23 +49,23 @@ const EditPicturePage: React.FC = () => {
   const imageSaveHandler = async () => {
     if (!defaultValue) return;
     if (!imgFile) return;
-    //   await updateImage({
-    //     technicId: defaultValue.id,
-    //     type,
-    //     imgFile: imgFile,
-    // }
   };
 
-  const clickHandler = () => {
-    // if (!id) return;
-    // updateTechnic(+id, {
-    //   name,
-    //   characteristic,
-    //   fullDescription,
-    //   price,
-    //   shortDescription,
-    //   type: technicsTypes[+type],
-    // });
+  const clickHandler = async () => {
+    if (title.trim() && price && category) {
+      const formData = new FormData();
+
+      formData.append("id", `${id}`);
+      formData.append("title", title);
+      formData.append("price", `${price}`);
+      formData.append("description", description);
+      formData.append("category", category);
+
+      await updatePicture(formData);
+      console.log("yes");
+    } else {
+      console.log("no");
+    }
   };
 
   const resetHandler = () => {
@@ -185,7 +186,6 @@ const EditPicturePage: React.FC = () => {
                 title={"Choose Picture"}
                 url={process.env.REACT_APP_API_URL + defaultValue.img}
               />
-              {/* {!isLoading ? ( */}
               <Button
                 variant="contained"
                 size="small"
@@ -194,9 +194,6 @@ const EditPicturePage: React.FC = () => {
               >
                 Save
               </Button>
-              {/* ) : (
-                <Loader />
-              )} */}
             </Paper>
           )}
         </>

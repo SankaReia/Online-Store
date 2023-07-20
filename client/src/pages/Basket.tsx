@@ -14,23 +14,18 @@ import Counter from "../UI/Counter";
 import { deleteFromBasket, fetchBasket } from "../http/basketApi";
 import { useAppSelector } from "../hooks/redux";
 import useAuth from "../hooks/useAuth";
-import { PictureI } from "../utils/models";
+import { BasketI, PictureI } from "../utils/models";
 import { pictureAPI } from "../services/PictureService";
-
-interface BasketI {
-  id: number;
-  person_id: number;
-  picture_id: number;
-  quantity: number;
-}
+import { basketAPI } from "../services/BasketService";
 
 const Basket: FC = () => {
   const { isAuth } = useAuth();
   const userID = useAppSelector((state) => state.userReducer.id);
-  const { data } = pictureAPI.useFetchAllPicturesQuery("");
+  const { data: pictures } = pictureAPI.useFetchAllPicturesQuery("");
+  const { data } = basketAPI.useFetchBasketQuery(userID);
 
   const [counter, setCounter] = useState<number>(1);
-  const [basketArr, setBasketArr] = useState<PictureI[]>([]);
+  const [basket, setBasket] = useState<PictureI[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQuantity, seTotalQuantity] = useState(0);
 
@@ -38,9 +33,9 @@ const Basket: FC = () => {
     let quantity = 0;
     let price = 0;
 
-    for (let i = 0; i < basketArr.length; i++) {
-      quantity += basketArr[i].quantity;
-      price += basketArr[i].price * basketArr[i].quantity;
+    for (let i = 0; i < basket.length; i++) {
+      quantity += basket[i].quantity;
+      price += basket[i].price * basket[i].quantity;
     }
 
     seTotalQuantity(quantity);
@@ -48,18 +43,30 @@ const Basket: FC = () => {
   };
 
   useEffect(() => {
-    if (isAuth) {
-      fetchBasket(userID).then((basket) => {
-        const newArr = basket.map((el: BasketI) => {
-          const newObj = data?.find((picture) => picture.id === el.picture_id);
-
-          return { ...newObj, quantity: el.quantity };
-        });
-        setBasketArr(newArr);
+    if (isAuth && data) {
+      const basketArr = data.map((el: BasketI) => {
+        const newObj = pictures?.find(
+          (picture) => picture.id === el.picture_id
+        );
+        return { ...newObj, quantity: el.quantity };
       });
+      setBasket(basketArr as PictureI[]);
     }
+
+    // if (isAuth) {
+    //   fetchBasket(userID).then((basket) => {
+    //     const newArr = basket.map((el: BasketI) => {
+    //       const newObj = pictures?.find(
+    //         (picture) => picture.id === el.picture_id
+    //       );
+
+    //       return { ...newObj, quantity: el.quantity };
+    //     });
+    //     setBasketArr(newArr);
+    //   });
+    // }
     totalPriceAndQuantity();
-  }, [userID, isAuth]);
+  }, [data]);
 
   const deleteHandler = (picture_id: number) => {
     try {
@@ -72,7 +79,7 @@ const Basket: FC = () => {
   return (
     <Grid container sx={{ mt: 5 }}>
       <Grid item xs={8}>
-        {basketArr.map((picture) => (
+        {basket.map((picture) => (
           <Card
             key={picture.id}
             sx={{

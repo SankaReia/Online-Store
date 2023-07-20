@@ -15,12 +15,12 @@ interface IRoute {
 
 export const AdminRoutes: IRoute[] = [
   {
-    path: AdminConsts.ADD_PICTURE_ROUTE,
-    Component: AddPicturePage,
-  },
-  {
     path: AdminConsts.PICTURE_ARRAY_ROUTE,
     Component: PictureArrayPage,
+  },
+  {
+    path: AdminConsts.ADD_PICTURE_ROUTE,
+    Component: AddPicturePage,
   },
   {
     path: AdminConsts.EDIT_PICTURE_ROUTE + "/:id",

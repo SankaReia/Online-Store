@@ -16,12 +16,12 @@ import DeleteModal from "../../UI/DeleteModal";
 // import Loader from "../../UI/Loader";
 
 import { AdminConsts } from "../../utils/routsConsts";
-import { useAppSelector } from "../../hooks/redux";
-import { deletePicture } from "../../http/pictureApi";
 import { pictureAPI } from "../../services/PictureService";
 
 const PictureArrayPage: React.FC = () => {
-  const { data } = pictureAPI.useFetchAllPicturesQuery("");
+  const [deletePicture, {}] = pictureAPI.useDeletePictureMutation();
+
+  const { data: pictures } = pictureAPI.useFetchAllPicturesQuery("");
   const [isModal, setIsModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState({ name: "", id: 0 });
   const navigate = useNavigate();
@@ -42,49 +42,44 @@ const PictureArrayPage: React.FC = () => {
       <Box sx={{ width: "100%" }}>
         <Paper elevation={3}>
           <List>
-            {
-              // pictures.status !== "pending" ? (
-              data?.map((picture, i) => (
-                <ListItem
-                  key={picture.id}
-                  secondaryAction={
-                    <div>
-                      <IconButton
-                        sx={{ mr: "5px" }}
-                        aria-label="edit"
-                        onClick={() =>
-                          navigate(
-                            AdminConsts.EDIT_PICTURE_ROUTE + "/" + picture.id
-                          )
-                        }
-                      >
-                        <Edit />
-                      </IconButton>
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => {
-                          setModalInfo({
-                            name: picture.title,
-                            id: picture.id,
-                          });
-                          setIsModal(true);
-                        }}
-                      >
-                        <DeleteForever />
-                      </IconButton>
-                    </div>
-                  }
-                >
-                  <ListItemAvatar>
-                    <Avatar>{i + 1}</Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={picture.title} />
-                </ListItem>
-              ))
-              // ) : (
-              //   <Loader />)
-            }
+            {pictures?.map((picture, i) => (
+              <ListItem
+                key={picture.id}
+                secondaryAction={
+                  <div>
+                    <IconButton
+                      sx={{ mr: "5px" }}
+                      aria-label="edit"
+                      onClick={() =>
+                        navigate(
+                          AdminConsts.EDIT_PICTURE_ROUTE + "/" + picture.id
+                        )
+                      }
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => {
+                        setModalInfo({
+                          name: picture.title,
+                          id: picture.id,
+                        });
+                        setIsModal(true);
+                      }}
+                    >
+                      <DeleteForever />
+                    </IconButton>
+                  </div>
+                }
+              >
+                <ListItemAvatar>
+                  <Avatar>{i + 1}</Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={picture.title} />
+              </ListItem>
+            ))}
           </List>
         </Paper>
       </Box>
