@@ -9,7 +9,7 @@ export interface PictureI {
 }
 
 export interface BasketI {
-  id: number;
+  id?: number;
   person_id: number;
   picture_id: number;
   quantity: number;

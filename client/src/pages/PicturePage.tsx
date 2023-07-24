@@ -1,13 +1,13 @@
 import { ArrowRightAlt } from "@mui/icons-material";
 import { Button, Box, Grid, Typography, Snackbar, Alert } from "@mui/material";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Counter from "../UI/Counter";
 import { useAppSelector } from "../hooks/redux";
-import { addToCart } from "../http/basketApi";
 import { pictureAPI } from "../services/PictureService";
 import Loader from "../UI/Loader";
+import { basketAPI } from "../services/BasketService";
 
 const priceStyle = {
   background: "black",
@@ -21,6 +21,7 @@ const priceStyle = {
 
 const PicturePage: FC = () => {
   const { id } = useParams();
+  const [addToBasket, {}] = basketAPI.useAddToBasketMutation();
   const { data: picture } = pictureAPI.useFetchOnePictureQuery(id as string);
   const userID = useAppSelector((state) => state.userReducer.id);
   const { isAuth } = useAuth();
@@ -30,7 +31,13 @@ const PicturePage: FC = () => {
   const addToBasketHandler = () => {
     if (!isAuth) return setOpenSnackbar(true);
     try {
-      if (id) addToCart(userID, id, counter);
+      if (id) {
+        addToBasket({
+          person_id: userID,
+          picture_id: +id,
+          quantity: counter,
+        });
+      }
     } catch (error) {
       console.log(error);
     }

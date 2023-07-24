@@ -11,7 +11,6 @@ import {
 import { Close } from "@mui/icons-material";
 import { FC, useEffect, useState } from "react";
 import Counter from "../UI/Counter";
-import { deleteFromBasket, fetchBasket } from "../http/basketApi";
 import { useAppSelector } from "../hooks/redux";
 import useAuth from "../hooks/useAuth";
 import { BasketI, PictureI } from "../utils/models";
@@ -23,6 +22,7 @@ const Basket: FC = () => {
   const userID = useAppSelector((state) => state.userReducer.id);
   const { data: pictures } = pictureAPI.useFetchAllPicturesQuery("");
   const { data } = basketAPI.useFetchBasketQuery(userID);
+  const [deleteFromBasket, {}] = basketAPI.useDeleteFromBasketMutation();
 
   const [counter, setCounter] = useState<number>(1);
   const [basket, setBasket] = useState<PictureI[]>([]);
@@ -52,19 +52,6 @@ const Basket: FC = () => {
       });
       setBasket(basketArr as PictureI[]);
     }
-
-    // if (isAuth) {
-    //   fetchBasket(userID).then((basket) => {
-    //     const newArr = basket.map((el: BasketI) => {
-    //       const newObj = pictures?.find(
-    //         (picture) => picture.id === el.picture_id
-    //       );
-
-    //       return { ...newObj, quantity: el.quantity };
-    //     });
-    //     setBasketArr(newArr);
-    //   });
-    // }
     totalPriceAndQuantity();
   }, [data]);
 

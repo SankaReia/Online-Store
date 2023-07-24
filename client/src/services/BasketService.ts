@@ -15,21 +15,21 @@ export const basketAPI = createApi({
       providesTags: (result) => ["Basket"],
     }),
 
-    // addToBasket: build.mutation<PictureI, FormData>({
-    //   query: (picture) => ({
-    //     url: "picture",
-    //     method: "POST",
-    //     body: picture,
-    //   }),
-    //   invalidatesTags: ["Basket"],
-    // }),
+    addToBasket: build.mutation<BasketI, BasketI>({
+      query: (basket) => ({
+        url: "basket",
+        method: "POST",
+        body: basket,
+      }),
+      invalidatesTags: ["Basket"],
+    }),
 
-    // deleteFromBasket: build.mutation<PictureI, number>({
-    //   query: (id) => ({
-    //     url: `picture/delete/${id}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: ["Basket"],
-    // }),
+    deleteFromBasket: build.mutation<BasketI, number>({
+      query: (picture_id) => ({
+        url: `basket/${picture_id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Basket"],
+    }),
   }),
 });
