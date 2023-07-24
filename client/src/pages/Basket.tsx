@@ -16,6 +16,7 @@ import useAuth from "../hooks/useAuth";
 import { BasketI, PictureI } from "../utils/models";
 import { pictureAPI } from "../services/PictureService";
 import { basketAPI } from "../services/BasketService";
+import { useTotalQuantity } from "../hooks/useTotalQuantity";
 
 const Basket: FC = () => {
   const { isAuth } = useAuth();
@@ -23,24 +24,11 @@ const Basket: FC = () => {
   const { data: pictures } = pictureAPI.useFetchAllPicturesQuery("");
   const { data } = basketAPI.useFetchBasketQuery(userID);
   const [deleteFromBasket, {}] = basketAPI.useDeleteFromBasketMutation();
+  const [updateBasket, {}] = basketAPI.useUpdateBasketMutation();
 
   const [counter, setCounter] = useState<number>(1);
   const [basket, setBasket] = useState<PictureI[]>([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [totalQuantity, seTotalQuantity] = useState(0);
-
-  const totalPriceAndQuantity = () => {
-    let quantity = 0;
-    let price = 0;
-
-    for (let i = 0; i < basket.length; i++) {
-      quantity += basket[i].quantity;
-      price += basket[i].price * basket[i].quantity;
-    }
-
-    seTotalQuantity(quantity);
-    setTotalPrice(price);
-  };
+  const { totalQuantity, totalPrice } = useTotalQuantity(basket);
 
   useEffect(() => {
     if (isAuth && data) {
@@ -52,12 +40,23 @@ const Basket: FC = () => {
       });
       setBasket(basketArr as PictureI[]);
     }
-    totalPriceAndQuantity();
   }, [data]);
 
-  const deleteHandler = (picture_id: number) => {
+  const deleteHandler = async (picture_id: number) => {
     try {
-      deleteFromBasket(picture_id);
+      await deleteFromBasket(picture_id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateHandler = async (picture_id: number) => {
+    try {
+      await updateBasket({
+        person_id: userID,
+        picture_id: picture_id,
+        quantity: counter,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +102,12 @@ const Basket: FC = () => {
                   alignItems: "center",
                 }}
               >
-                <Counter counter={picture.quantity} setCounter={setCounter} />
+                <Counter
+                  counter={picture.quantity}
+                  setCounter={setCounter}
+                  changeHandler={updateHandler}
+                  x={picture.id}
+                />
                 <Typography sx={{ mt: 1, fontSize: 18, color: "dimgrey" }}>
                   {picture.price} $/pcs.
                 </Typography>

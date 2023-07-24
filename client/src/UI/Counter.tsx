@@ -16,9 +16,16 @@ const counterStyle = {
 interface CounterProp {
   setCounter: React.Dispatch<React.SetStateAction<number>>;
   counter: number;
+  changeHandler?: (x: any) => void;
+  x?: number;
 }
 
-const Counter: FC<CounterProp> = ({ counter, setCounter }) => {
+const Counter: FC<CounterProp> = ({
+  counter,
+  setCounter,
+  changeHandler,
+  x,
+}) => {
   return (
     <Box style={{ display: "flex" }}>
       <Fab
@@ -28,7 +35,10 @@ const Counter: FC<CounterProp> = ({ counter, setCounter }) => {
           border: "3px solid black",
           borderRadius: "50% 0 0 50%",
         }}
-        onClick={() => setCounter((prev) => (prev > 1 ? prev - 1 : 1))}
+        onClick={() => {
+          setCounter((prev) => (prev > 1 ? prev - 1 : 1));
+          changeHandler?.(x);
+        }}
       >
         <Remove />
       </Fab>
@@ -41,7 +51,10 @@ const Counter: FC<CounterProp> = ({ counter, setCounter }) => {
           border: "3px solid black",
           borderRadius: "0 50% 50% 0",
         }}
-        onClick={() => setCounter((prev) => (prev < 10 ? prev + 1 : 10))}
+        onClick={() => {
+          setCounter((prev) => (prev < 10 ? prev + 1 : 10));
+          changeHandler?.(x);
+        }}
       >
         <Add />
       </Fab>

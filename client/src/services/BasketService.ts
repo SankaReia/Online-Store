@@ -26,8 +26,17 @@ export const basketAPI = createApi({
 
     deleteFromBasket: build.mutation<BasketI, number>({
       query: (picture_id) => ({
-        url: `basket/${picture_id}`,
+        url: `basket/delete/${picture_id}`,
         method: "DELETE",
+      }),
+      invalidatesTags: ["Basket"],
+    }),
+
+    updateBasket: build.mutation<BasketI, BasketI>({
+      query: (basket) => ({
+        url: "basket/update",
+        method: "PUT",
+        body: basket,
       }),
       invalidatesTags: ["Basket"],
     }),

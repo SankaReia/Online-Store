@@ -28,11 +28,11 @@ const PicturePage: FC = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [counter, setCounter] = useState<number>(1);
 
-  const addToBasketHandler = () => {
+  const addToBasketHandler = async () => {
     if (!isAuth) return setOpenSnackbar(true);
     try {
       if (id) {
-        addToBasket({
+        await addToBasket({
           person_id: userID,
           picture_id: +id,
           quantity: counter,

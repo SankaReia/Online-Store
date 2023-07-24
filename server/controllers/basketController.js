@@ -48,6 +48,22 @@ class PictureController {
       next(ApiError.badRequest(e.message));
     }
   }
+
+  //-----------------------------------------------------------------------------------
+
+  async update(req, res, next) {
+    try {
+      const { person_id, picture_id, quantity } = req.body;
+
+      const newBasket = await db.query(
+        "UPDATE basket SET quantity=$1 WHERE person_id=$2 AND picture_id=$3 RETURNING *",
+        [quantity, person_id, picture_id]
+      );
+      return res.json(newBasket.rows[0]);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
 }
 
 module.exports = new PictureController();

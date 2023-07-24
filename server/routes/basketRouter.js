@@ -3,7 +3,8 @@ const router = new Router();
 const basketController = require("../controllers/basketController");
 
 router.post("/", basketController.add);
-router.delete("/:id", basketController.deleteOne);
+router.delete("/delete/:id", basketController.deleteOne);
+router.put("/update", basketController.update);
 router.get("/:id", basketController.getAll);
 
 module.exports = router;
