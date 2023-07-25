@@ -7,6 +7,7 @@ import AddPicturePage from "./pages/admin/AddPicturePage";
 import PictureArrayPage from "./pages/admin/PictureArrayPage";
 import EditPicturePage from "./pages/admin/EditPicturePage";
 import Shop from "./pages/Shop";
+import Checkout from "./pages/checkout/Checkout";
 
 interface IRoute {
   path: string;
@@ -46,6 +47,10 @@ export const publicRoutes: IRoute[] = [
   {
     path: PublicConsts.BASKET_ROUTE,
     Component: Basket,
+  },
+  {
+    path: PublicConsts.CHECKOUT_ROUTE,
+    Component: Checkout,
   },
 ];
 

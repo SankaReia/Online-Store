@@ -1,7 +1,7 @@
 import { ArrowRightAlt } from "@mui/icons-material";
 import { Button, Box, Grid, Typography, Snackbar, Alert } from "@mui/material";
-import { FC, useState } from "react";
-import { useParams } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import Counter from "../UI/Counter";
 import { useAppSelector } from "../hooks/redux";
@@ -20,13 +20,25 @@ const priceStyle = {
 };
 
 const PicturePage: FC = () => {
-  const { id } = useParams();
-  const [addToBasket, {}] = basketAPI.useAddToBasketMutation();
-  const { data: picture } = pictureAPI.useFetchOnePictureQuery(id as string);
-  const userID = useAppSelector((state) => state.userReducer.id);
+  const navigate = useNavigate();
   const { isAuth } = useAuth();
+  const { id } = useParams();
+  const userID = useAppSelector((state) => state.userReducer.id);
+  const [addToBasket, {}] = basketAPI.useAddToBasketMutation();
+  const { data: basket } = basketAPI.useFetchBasketQuery(userID);
+  const { data: picture } = pictureAPI.useFetchOnePictureQuery(id as string);
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [counter, setCounter] = useState<number>(1);
+  const [counter, setCounter] = useState(1);
+  const [isInBasket, setIsInBasket] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      const result = basket?.find((picture) => picture.picture_id === +id);
+      if (result !== undefined) {
+        setIsInBasket(true);
+      }
+    }
+  }, [basket]);
 
   const addToBasketHandler = async () => {
     if (!isAuth) return setOpenSnackbar(true);
@@ -81,19 +93,36 @@ const PicturePage: FC = () => {
                   marginTop: "30px",
                 }}
               >
-                <Counter counter={counter} setCounter={setCounter} />
-                <Button
-                  variant="contained"
-                  sx={{
-                    borderRadius: "30px",
-                    padding: "15px 20px",
-                    background: "black",
-                  }}
-                  onClick={addToBasketHandler}
-                >
-                  Add to cart
-                  <ArrowRightAlt />
-                </Button>
+                {!isInBasket ? (
+                  <>
+                    <Counter counter={counter} setCounter={setCounter} />
+                    <Button
+                      variant="contained"
+                      sx={{
+                        borderRadius: "30px",
+                        padding: "15px 20px",
+                        background: "black",
+                      }}
+                      onClick={addToBasketHandler}
+                    >
+                      Add to cart
+                      <ArrowRightAlt />
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      borderRadius: "30px",
+                      padding: "15px 20px",
+                      background: "black",
+                    }}
+                    onClick={() => navigate("/basket")}
+                  >
+                    In The Cart
+                    <ArrowRightAlt />
+                  </Button>
+                )}
               </div>
             </Grid>
           </Grid>

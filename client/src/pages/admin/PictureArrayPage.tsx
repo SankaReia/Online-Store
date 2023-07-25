@@ -12,7 +12,7 @@ import {
 import { Edit, DeleteForever } from "@mui/icons-material/";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DeleteModal from "../../UI/DeleteModal";
+import DeleteModal from "../../components/DeleteModal";
 // import Loader from "../../UI/Loader";
 
 import { AdminConsts } from "../../utils/routsConsts";
