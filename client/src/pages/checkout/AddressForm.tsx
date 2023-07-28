@@ -1,15 +1,27 @@
 import React, { FC } from "react";
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, TextField, Typography } from "@mui/material";
+import { AddressI } from "../../utils/models";
+import MySnackbar from "../../UI/MySnackbar";
 
-const AddressForm: FC = () => {
+interface AddressFormProp {
+  isFilledIn: boolean;
+  setIsFilledIn: React.Dispatch<React.SetStateAction<boolean>>;
+  address: AddressI;
+  setAddress: React.Dispatch<React.SetStateAction<AddressI>>;
+}
+
+const AddressForm: FC<AddressFormProp> = ({
+  isFilledIn,
+  setIsFilledIn,
+  address,
+  setAddress,
+}) => {
+  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress({ ...address, [event.target.id]: event.target.value });
+  };
+
   return (
-    <React.Fragment>
+    <>
       <Typography variant="h6" gutterBottom>
         Shipping address
       </Typography>
@@ -18,97 +30,81 @@ const AddressForm: FC = () => {
           <TextField
             required
             id="firstName"
-            name="firstName"
             label="First name"
             fullWidth
-            autoComplete="given-name"
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
             id="lastName"
-            name="lastName"
             label="Last name"
             fullWidth
-            autoComplete="family-name"
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             required
-            id="address1"
-            name="address1"
-            label="Address line 1"
+            id="address"
+            label="Address line"
             fullWidth
-            autoComplete="shipping address-line1"
             variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
-            variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
             id="city"
-            name="city"
             label="City"
             fullWidth
-            autoComplete="shipping address-level2"
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
+            required
             id="state"
-            name="state"
             label="State/Province/Region"
             fullWidth
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
             id="zip"
-            name="zip"
             label="Zip / Postal code"
             fullWidth
-            autoComplete="shipping postal-code"
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
             id="country"
-            name="country"
             label="Country"
             fullWidth
-            autoComplete="shipping country"
             variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={
-              <Checkbox color="secondary" name="saveAddress" value="yes" />
-            }
-            label="Use this address for payment details"
+            onChange={inputChangeHandler}
           />
         </Grid>
       </Grid>
-    </React.Fragment>
+
+      <MySnackbar
+        openSnackbar={!isFilledIn}
+        message={"Not everything is filled in"}
+        type={"warning"}
+        setOpenSnackbar={setIsFilledIn}
+      />
+    </>
   );
 };
 

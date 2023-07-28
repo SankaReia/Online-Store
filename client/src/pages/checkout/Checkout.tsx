@@ -12,27 +12,61 @@ import { FC, useState } from "react";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
+import { AddressI, PaymentI } from "../../utils/models";
 
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
-function getStepContent(step: number) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
-
 const Checkout: FC = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const [isFilledIn, setIsFilledIn] = useState(true);
+  const [address, setAddress] = useState<AddressI>({
+    firstName: "",
+    lastName: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+  });
+  const [payment, setPayment] = useState<PaymentI>({
+    cardName: "",
+    cardNumber: "",
+    expDate: "",
+    cvv: "",
+  });
+
+  const getStepContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return (
+          <AddressForm
+            address={address}
+            setAddress={setAddress}
+            isFilledIn={isFilledIn}
+            setIsFilledIn={setIsFilledIn}
+          />
+        );
+      case 1:
+        return (
+          <PaymentForm
+            payment={payment}
+            setPayment={setPayment}
+            isFilledIn={isFilledIn}
+            setIsFilledIn={setIsFilledIn}
+          />
+        );
+      case 2:
+        return <Review address={address} payment={payment} />;
+      default:
+        throw new Error("Unknown step");
+    }
+  };
 
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    for (const key in address) {
+      if (address[key] === "") setIsFilledIn(false);
+      else setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {

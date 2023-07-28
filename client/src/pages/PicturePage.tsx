@@ -1,5 +1,5 @@
 import { ArrowRightAlt } from "@mui/icons-material";
-import { Button, Box, Grid, Typography, Snackbar, Alert } from "@mui/material";
+import { Button, Box, Grid, Typography } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
@@ -8,6 +8,7 @@ import { useAppSelector } from "../hooks/redux";
 import { pictureAPI } from "../services/PictureService";
 import Loader from "../UI/Loader";
 import { basketAPI } from "../services/BasketService";
+import MySnackbar from "../UI/MySnackbar";
 
 const priceStyle = {
   background: "black",
@@ -53,16 +54,6 @@ const PicturePage: FC = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenSnackbar(false);
   };
 
   return (
@@ -127,19 +118,12 @@ const PicturePage: FC = () => {
             </Grid>
           </Grid>
 
-          <Snackbar
-            open={openSnackbar}
-            autoHideDuration={5000}
-            onClose={handleClose}
-          >
-            <Alert
-              onClose={handleClose}
-              severity="warning"
-              sx={{ width: "100%" }}
-            >
-              You are not logged in!
-            </Alert>
-          </Snackbar>
+          <MySnackbar
+            openSnackbar={openSnackbar}
+            message={"You are not logged in"}
+            type={"warning"}
+            setOpenSnackbar={setOpenSnackbar}
+          />
         </Box>
       ) : (
         <Loader />

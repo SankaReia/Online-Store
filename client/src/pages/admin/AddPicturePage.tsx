@@ -1,5 +1,4 @@
 import {
-  Alert,
   AlertColor,
   Box,
   Button,
@@ -10,14 +9,13 @@ import {
   Paper,
   Select,
   SelectChangeEvent,
-  Snackbar,
   TextField,
 } from "@mui/material";
 import React, { FC, useState } from "react";
 import ImageChanger from "../../components/admin/ImageChanger";
 import { categories } from "../../utils/categories";
 import { pictureAPI } from "../../services/PictureService";
-//   import Loader from "../../UI/Loader";
+import MySnackbar from "../../UI/MySnackbar";
 
 const AddPicturePage: FC = () => {
   const [createPicture, {}] = pictureAPI.useCreatePictureMutation();
@@ -47,27 +45,16 @@ const AddPicturePage: FC = () => {
       formData.append("description", description);
       formData.append("category", category);
 
-      setMessage("Added successfully!");
+      setMessage("Added successfully");
       setAlertType("success");
       setIsAdded(true);
 
       await createPicture(formData);
-      // return await createPicture(formData);
     } else {
-      setMessage("Not all data is entered!");
+      setMessage("Not all data is entered");
       setAlertType("warning");
       setIsAdded(true);
     }
-  };
-
-  const handleClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setIsAdded(false);
   };
 
   return (
@@ -154,23 +141,17 @@ const AddPicturePage: FC = () => {
         />
       </div>
       <div style={{ marginTop: "10px" }}>
-        {/* {!isLoading ? ( */}
         <Button variant="contained" fullWidth onClick={uploadHandler}>
           Add
         </Button>
-        {/* ) : (
-            <Loader />
-          )} */}
       </div>
-      <Snackbar open={isAdded} autoHideDuration={5000} onClose={handleClose}>
-        <Alert
-          onClose={handleClose}
-          severity={alertType}
-          sx={{ width: "100%" }}
-        >
-          {message}
-        </Alert>
-      </Snackbar>
+
+      <MySnackbar
+        openSnackbar={isAdded}
+        message={message}
+        type={alertType}
+        setOpenSnackbar={setIsAdded}
+      />
     </Paper>
   );
 };

@@ -1,13 +1,24 @@
 import React, { FC } from "react";
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Grid, TextField, Typography } from "@mui/material";
+import { PaymentI } from "../../utils/models";
 
-const PaymentForm: FC = () => {
+interface PaymentFormProp {
+  isFilledIn: boolean;
+  setIsFilledIn: React.Dispatch<React.SetStateAction<boolean>>;
+  payment: PaymentI;
+  setPayment: React.Dispatch<React.SetStateAction<PaymentI>>;
+}
+
+const PaymentForm: FC<PaymentFormProp> = ({
+  payment,
+  setPayment,
+  isFilledIn,
+  setIsFilledIn,
+}) => {
+  const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPayment({ ...payment, [event.target.id]: event.target.value });
+  };
+
   return (
     <>
       <Typography variant="h6" gutterBottom>
@@ -20,8 +31,8 @@ const PaymentForm: FC = () => {
             id="cardName"
             label="Name on card"
             fullWidth
-            autoComplete="cc-name"
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -30,8 +41,8 @@ const PaymentForm: FC = () => {
             id="cardNumber"
             label="Card number"
             fullWidth
-            autoComplete="cc-number"
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -40,8 +51,8 @@ const PaymentForm: FC = () => {
             id="expDate"
             label="Expiry date"
             fullWidth
-            autoComplete="cc-exp"
             variant="standard"
+            onChange={inputChangeHandler}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -51,14 +62,8 @@ const PaymentForm: FC = () => {
             label="CVV"
             helperText="Last three digits on signature strip"
             fullWidth
-            autoComplete="cc-csc"
             variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Remember credit card details for next time"
+            onChange={inputChangeHandler}
           />
         </Grid>
       </Grid>
