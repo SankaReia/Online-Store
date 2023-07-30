@@ -45,20 +45,21 @@ const Home: FC = () => {
       >
         <CardContent>
           <Typography variant="h6" component="h2" sx={{ color: "#2d6097" }}>
-            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Art Avenue is a creative oasis for lovers of art and aesthetics!
+            Here you will find a wide selection of original paintings, posters
+            and other works of art that will give your home a unique and unique
+            atmosphere.
           </Typography>
           <Typography component="p" sx={{ pt: 2, pb: 2 }}>
-            Pretium lectus quam id leo in vitae turpis massa. Adipiscing elit
-            pellentesque habitant morbi tristique. Nisl pretium fusce id velit
-            ut tortor pretium viverra. Pharetra convallis posuere morbi leo urna
-            molestie at elementum. Accumsan in nisl nisi scelerisque eu
-            ultrices.
+            We strive to make the ordering process simple and convenient, so
+            it's easy to find the right product on our website and make a
+            purchase in just a few clicks. We guarantee high quality of work and
+            careful packaging so that your order is delivered safely.
           </Typography>
           <Typography component="p">
-            Diam phasellus vestibulum lorem sed risus. Scelerisque eleifend
-            donec pretium vulputate. Ut tellus elementum sagittis vitae et leo.
-            Sed odio morbi quis commodo odio. Egestas fringilla phasellus
-            faucibus scelerisque eleifend donec pretium vulputate sapien.
+            Art Avenue is not just a store, it is a place where ideas are born
+            and dreams about art come true. Join our creative family and feel
+            inspired every day!
           </Typography>
         </CardContent>
       </Card>

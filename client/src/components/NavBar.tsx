@@ -36,7 +36,7 @@ const NavBar: FC = () => {
           navigate(PublicConsts.HOME_ROUTE);
         }}
       >
-        Company Name
+        Art Avenue
       </Typography>
       <div style={{ height: "1px", background: "white" }}></div>
       <Box

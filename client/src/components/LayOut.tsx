@@ -8,7 +8,7 @@ function Copyright() {
     <Typography variant="body2">
       {"Copyright © "}
       <Link color="secondary" href="https://mui.com/">
-        Your Website
+        ArtAvenue
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -42,7 +42,7 @@ const LayOut: FC = () => {
         }}
       >
         <Container maxWidth="sm">
-          <Typography variant="body1">Company Name</Typography>
+          <Typography variant="body1">Art Avenue</Typography>
           <Copyright />
         </Container>
       </Box>

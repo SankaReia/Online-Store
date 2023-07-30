@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AdminRoutes, publicRoutes, categoryRoutes } from "./routes";
 import Layout from "./components/admin/Layout";
@@ -7,7 +7,7 @@ import LayOut from "./components/LayOut";
 import useAuth from "./hooks/useAuth";
 
 const AppRouter: FC = () => {
-  const { isAdmin, isAuth } = useAuth();
+  const { isAdmin } = useAuth();
 
   return (
     <Routes>

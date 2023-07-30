@@ -64,13 +64,12 @@ const Carousel: FC<CarouselProp> = ({
             component="p"
             sx={{ pt: 2, pb: 2, maxWidth: "500px", color: "white" }}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Modular images are works of art created by combining several
+            separate modules or elements, which then form a whole image.
           </Typography>
           <ul style={{ color: "white" }}>
-            <li>34 mi tempus imperdiet</li>
-            <li>iaculis 1 eu 3 non</li>
-            <li>ante in nibh 2500</li>
+            <li>Various themes and styles</li>
+            <li>Various materials and techniques</li>
           </ul>
         </CardContent>
         <CardActions>

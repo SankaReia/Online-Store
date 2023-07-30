@@ -29,7 +29,6 @@ class PictureController {
 
   async update(req, res, next) {
     try {
-      // const { id } = req.params;
       const { title, price, category, description, id } = req.body;
 
       const newPicture = await db.query(
@@ -46,7 +45,6 @@ class PictureController {
   //-----------------------------------------------------------------------------------
 
   async getAll(req, res, next) {
-    //query - строка запроса
     try {
       const pictures = await db.query("SELECT * FROM picture");
 

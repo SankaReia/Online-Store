@@ -13,15 +13,14 @@ import { Edit, DeleteForever } from "@mui/icons-material/";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../../components/DeleteModal";
-// import Loader from "../../UI/Loader";
-
+import Loader from "../../UI/Loader";
 import { AdminConsts } from "../../utils/routsConsts";
 import { pictureAPI } from "../../services/PictureService";
 
 const PictureArrayPage: React.FC = () => {
   const [deletePicture, {}] = pictureAPI.useDeletePictureMutation();
 
-  const { data: pictures } = pictureAPI.useFetchAllPicturesQuery("");
+  const { data: pictures, isLoading } = pictureAPI.useFetchAllPicturesQuery("");
   const [isModal, setIsModal] = useState<boolean>(false);
   const [modalInfo, setModalInfo] = useState({ name: "", id: 0 });
   const navigate = useNavigate();
@@ -41,7 +40,8 @@ const PictureArrayPage: React.FC = () => {
       </DialogTitle>
       <Box sx={{ width: "100%" }}>
         <Paper elevation={3}>
-          <List>
+          {isLoading && <Loader />}
+          <List sx={{ mb: 5 }}>
             {pictures?.map((picture, i) => (
               <ListItem
                 key={picture.id}

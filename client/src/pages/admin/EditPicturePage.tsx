@@ -155,19 +155,15 @@ const EditPicturePage: React.FC = () => {
               </div>
             </FormGroup>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              {/* {!isLoading ? ( */}
               <>
                 <Button variant="contained" onClick={clickHandler} size="large">
                   Save
                 </Button>
                 <Button onClick={resetHandler}>Cancel</Button>
               </>
-              {/* ) : (
-              <Loader />
-            )} */}
             </Box>
           </Paper>
-          {defaultValue && (
+          {/* {defaultValue && (
             <Paper
               elevation={3}
               sx={{
@@ -195,7 +191,7 @@ const EditPicturePage: React.FC = () => {
                 Save
               </Button>
             </Paper>
-          )}
+          )} */}
         </>
       ) : (
         <Loader />
